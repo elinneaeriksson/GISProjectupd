@@ -185,27 +185,133 @@ public class Layer {
     }
 
     public Layer focalVariety(int radius, boolean isSquare, String outLayerName) {
-        Layer outLayer = new Layer(outLayerName, this.nRows, this.nCols, this.origin, this.resolution, nullValue);
-        outLayer.values = new double[this.nRows * this.nCols];
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[nRows*nCols];
 
-        for(int i = 0; i < this.nRows; ++i) {
-            for(int j = 0; j < this.nCols; ++j) {
-                int[] neighborIndices = this.getNeighborhood(i * this.nCols + j, radius, isSquare);
+        // Iterate every cell
+        for (int i = 0; i < nRows; i++){
+            for (int j = 0; j < nCols; j++){
+                // Get neighborhood indices
+                int[] neighborIndices = getNeighborhood(i*nCols+j, radius, isSquare);
+
+                // Get neighborhood values
                 double[] neighborValues = new double[neighborIndices.length];
                 int count = 0;
-                int[] var10 = neighborIndices;
-                int var11 = neighborIndices.length;
-
-                for(int var12 = 0; var12 < var11; ++var12) {
-                    int id = var10[var12];
+                for (int id : neighborIndices){
                     neighborValues[count] = this.values[id];
-                    ++count;
+                    count++;
                 }
-
-                outLayer.values[i * this.nCols + j] = (double)countUniqueValues(neighborValues);
+                // Focal variety value
+                outLayer.values[i*nCols+j] = countUniqueValues(neighborValues); // Null value handled here
             }
         }
+        return outLayer;
+    }
 
+    public Layer focalMaximum(int radius, boolean isSquare, String outLayerName){
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[nRows*nCols];
+
+        for (int i = 0; i < nRows; i++){
+            for (int j = 0; j < nCols; j++){
+                // Get neighborhood indices
+                int[] neighborIndices = getNeighborhood(i*nCols+j, radius, isSquare);
+
+                // Get neighborhood values
+                double[] neighborValues = new double[neighborIndices.length];
+                int count = 0;
+                for (int id : neighborIndices){
+                    neighborValues[count] = this.values[id];
+                    count++;
+                }
+                // Focal maximum value
+                outLayer.values[i*nCols+j] = getMax(neighborValues);
+            }
+        }
+        return outLayer;
+    }
+
+    public Layer focalMinimum(int radius, boolean isSquare, String outLayerName){
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[nRows*nCols];
+
+        for (int i = 0; i < nRows; i++){
+            for (int j = 0; j < nCols; j++){
+                // Get neighborhood indices
+                int[] neighborIndices = getNeighborhood(i*nCols+j, radius, isSquare);
+
+                // Get neighborhood values
+                double[] neighborValues = new double[neighborIndices.length];
+                int count = 0;
+                for (int id : neighborIndices){
+                    neighborValues[count] = this.values[id];
+                    count++;
+                }
+                // Focal minimum value
+                outLayer.values[i*nCols+j] = getMin(neighborValues); // Null value handled here
+            }
+        }
+        return outLayer;
+    }
+
+    public Layer focalSum(int radius, boolean isSquare, String outLayerName){
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[nRows*nCols];
+
+        for (int i = 0; i < nRows; i++){
+            for (int j = 0; j < nCols; j++){
+                // Get neighborhood indices
+                int[] neighborIndices = getNeighborhood(i*nCols+j, radius, isSquare);
+
+                // Get neighborhood values
+                double[] neighborValues = new double[neighborIndices.length];
+                int count = 0;
+                for (int id : neighborIndices){
+                    neighborValues[count] = this.values[id];
+                    count++;
+                }
+                // Focal sum value
+                double sum = 0;
+                for (double value : neighborValues) {
+                    if(value != nullValue)
+                        sum += value;
+                    else
+                        continue;
+                }
+                outLayer.values[i*nCols+j] = sum;
+            }
+        }
+        return outLayer;
+    }
+
+    public Layer focalMean(int radius, boolean isSquare, String outLayerName){
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[nRows*nCols];
+
+        for (int i = 0; i < nRows; i++){
+            for (int j = 0; j < nCols; j++){
+                // Get neighborhood indices
+                int[] neighborIndices = getNeighborhood(i*nCols+j, radius, isSquare);
+
+                // Get neighborhood values
+                double[] neighborValues = new double[neighborIndices.length];
+                int count = 0;
+                for (int id : neighborIndices){
+                    neighborValues[count] = this.values[id];
+                    count++;
+                }
+                // Focal mean value
+                double sum = 0;
+                int l = neighborValues.length;
+                for (double value : neighborValues) {
+                    if(value != nullValue)
+                        sum += value;
+                    else
+                        l -= 1;
+                }
+                outLayer.values[i*nCols+j] = sum / l;
+            }
+        }
         return outLayer;
     }
 
@@ -290,6 +396,15 @@ public class Layer {
         return max;
     }
 
+    private double getMax(double[] arr) {
+        double max = Double.NEGATIVE_INFINITY;
+        for (double v : arr) {
+            if (v > max)
+                max = v;
+        }
+        return max;
+    }
+
     private double getMin() {
         double min = Double.POSITIVE_INFINITY;
 
@@ -301,6 +416,15 @@ public class Layer {
             }
         }
 
+        return min;
+    }
+
+    private double getMin(double[] arr) {
+        double min = Double.POSITIVE_INFINITY;
+        for (double v : arr) {
+            if (v < min && v != nullValue)
+                min = v;
+        }
         return min;
     }
 
