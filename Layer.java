@@ -314,7 +314,7 @@ public class Layer {
         }
         return outLayer;
     }
-
+    /*
     public Layer zonalMinimum(Layer inLayer, String outLayerName) {
         Layer outLayer = new Layer(outLayerName, this.nRows, this.nCols, this.origin, this.resolution, nullValue);
         outLayer.values = new double[this.nRows * this.nCols];
@@ -336,6 +336,120 @@ public class Layer {
         for(i = 0; i < this.nRows; ++i) {
             for(j = 0; j < this.nCols; ++j) {
                 outLayer.values[i * this.nCols + j] = (Double)zone_min.get(inLayer.values[i * this.nCols + j]);
+            }
+        }
+
+        return outLayer;
+    }
+    */
+    public Layer zonalMinimum(Layer inLayer, String outLayerName) { // Changed to one dimensional array
+        Layer outLayer = new Layer(outLayerName, this.nRows, this.nCols, this.origin, this.resolution, nullValue);
+        outLayer.values = new double[this.nRows * this.nCols];
+        HashMap<Double, Double> zone_min = new HashMap<>();
+
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            double zone = inLayer.values[i];
+            if (zone==nullValue) {
+                zone_min.put(zone, nullValue);
+            }
+            else if(!zone_min.containsKey(zone)) {
+                    zone_min.put(zone, this.values[i]);
+                }
+                else {
+                    if (zone_min.get(zone) > this.values[i]) {
+                        zone_min.put(zone, this.values[i]);
+                    }
+                    else {
+                        continue;
+                    }
+            }
+        }
+
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            if (this.values[i] == nullValue) {
+                outLayer.values[i] = nullValue;
+            }
+            else {
+                outLayer.values[i] = zone_min.get(inLayer.values[i]);
+            }
+        }
+
+        return outLayer;
+    }
+
+    public Layer zonalMaximum(Layer inLayer, String outLayerName) {
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[this.nRows*this.nCols];
+
+        HashMap<Double, Double> zone_max = new HashMap<>();
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            double zone = inLayer.values[i];
+            if (zone==nullValue) {
+                zone_max.put(zone, nullValue);
+            }
+            else if(!zone_max.containsKey(zone)) {
+                    zone_max.put(zone, this.values[i]);
+                }
+                else {
+                    if (zone_max.get(zone) < this.values[i]) {
+                        zone_max.put(zone, this.values[i]);
+                    }
+                    else {
+                        continue;
+                    }
+            }
+        }
+
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            if (this.values[i] == nullValue) {
+                outLayer.values[i] = nullValue;
+            }
+            else {
+                outLayer.values[i] = zone_max.get(inLayer.values[i]);
+            }
+        }
+
+        return outLayer;
+    }
+
+    public Layer zonalMean(Layer inLayer, String outLayerName) {
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[this.nRows*this.nCols];
+
+        HashMap<Double, Double> zone_mean = new HashMap<>();
+        HashMap<Double, Integer> zone_mean_length = new HashMap<>(); // Keeps track of the number of values in each zone
+
+        // Assigning cells to zones
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            double zone = inLayer.values[i];
+            if (zone==nullValue) {
+                zone_mean.put(zone, nullValue);
+            }
+            else if(!zone_mean.containsKey(zone)) {
+                    zone_mean.put(zone, this.values[i]);
+                    zone_mean_length.put(zone, 1);
+                }
+                else {
+                    double sum = zone_mean.get(zone) + this.values[i];
+                    int zoneLength = zone_mean_length.get(zone) + 1;
+                    zone_mean.put(zone, sum);
+                    zone_mean_length.put(zone, zoneLength);
+            }
+        }
+
+        // Calculate zonal mean
+        for (Double key : zone_mean.keySet()) {
+            double meanVal = zone_mean.get(key)/zone_mean_length.get(key);
+            zone_mean.put(key, meanVal);
+        }
+
+        // Print in outLayer
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            if (this.values[i] == nullValue) {
+                outLayer.values[i] = nullValue;
+            }
+            else {
+                outLayer.values[i] = zone_mean.get(inLayer.values[i]);
             }
         }
 
