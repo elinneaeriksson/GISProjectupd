@@ -55,6 +55,8 @@ public class Layer {
 
     }
 
+
+
     public Layer(String layerName, int rows, int cols, double[] oxy, double res, double nullv) {
         this.name = layerName;
         this.nRows = rows;
@@ -63,6 +65,14 @@ public class Layer {
         this.resolution = res;
         nullValue = nullv;
         this.values = new double[this.nRows * this.nCols];
+    }
+
+    public int getnCols() {
+        return nCols;
+    }
+
+    public int getnRows() {
+        return nRows;
     }
 
     public void print() {
@@ -153,7 +163,7 @@ public class Layer {
         int[] colors = new int[3];
 
         for(int i = 0; i < this.nRows; ++i) {
-            for(int j = 0; j < this.nCols; ++j) {
+            for (int j = 0; j < this.nCols; ++j) {
                 index = findIndex(highlight, this.values[i * this.nCols + j]);
                 if (index != -1) {
                     colors[0] = hColors[index][0];
@@ -168,7 +178,6 @@ public class Layer {
                 }
             }
         }
-
         return image;
     }
 
@@ -455,6 +464,72 @@ public class Layer {
 
         return outLayer;
     }
+
+    public Layer zonalSum(Layer zoneLayer, String outLayerName) {
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[this.nRows*this.nCols];
+
+        HashMap<Double, Double> zone_sum = new HashMap<>();
+
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            double zone = zoneLayer.values[i];
+            if (zone==nullValue) { //if NoData
+                zone_sum.put(zone, nullValue); //is this necessary
+            }
+            else if(!zone_sum.containsKey(zone)) { //first time visiting zone
+                zone_sum.put(zone, this.values[i]);
+            }
+            else { //already visited zone
+                zone_sum.put(zone, (zone_sum.get(zone) + this.values[i]));
+            }
+        }
+
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            if (this.values[i] == nullValue) {
+                outLayer.values[i] = nullValue;
+            }
+            else {
+                outLayer.values[i] = zone_sum.get(zoneLayer.values[i]);
+            }
+        }
+        return outLayer;
+    }
+
+    public Layer zonalVariety(Layer zoneLayer, String outLayerName) {
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[this.nRows*this.nCols];
+
+        HashMap<Double, Set<Double>> zone_var = new HashMap<>();
+
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            double zone = zoneLayer.values[i];
+            if (zone==nullValue) { //if NoData
+                Set nullSet = new HashSet<Double>();
+                zone_var.put(zone,nullSet); //maybe unnecessary
+            }
+            else if(!zone_var.containsKey(zone)) { //first time visiting zone
+                Set zoneSet = new HashSet<Double>();
+                zoneSet.add(this.values[i]);
+                zone_var.put(zone, zoneSet);
+            }
+            else { //already visited zone
+                Set zoneSet = zone_var.get(zone);
+                zoneSet.add(this.values[i]);
+                zone_var.put(zone, zoneSet);
+            }
+        }
+
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            if (this.values[i] == nullValue) {
+                outLayer.values[i] = nullValue;
+            }
+            else {
+                outLayer.values[i] = zone_var.get(zoneLayer.values[i]).size();
+            }
+        }
+        return outLayer;
+    }
+
 
     private int[] getNeighborhood(int index, int radius, boolean isSquare) {
         ArrayList<Integer> list = new ArrayList();

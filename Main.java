@@ -6,8 +6,10 @@ import java.awt.image.BufferedImage;
 //adding
 public class Main {
     public static void main(String[] args) {
+
         if (args.length == 4) {
             Layer layer = new Layer(args[0], args[1]);
+
             JFrame appFrame1 = new JFrame();
             JFrame appFrame2 = new JFrame();
             BufferedImage image = layer.toImage();
