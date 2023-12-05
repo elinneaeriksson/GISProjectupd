@@ -117,7 +117,6 @@ public class Layer {
         } catch (Exception var5) {
             var5.printStackTrace();
         }
-
     }
 
     public BufferedImage toImage() {
@@ -138,6 +137,27 @@ public class Layer {
             }
         }
 
+        return image;
+    }
+
+    //this can be used to
+    public BufferedImage toImageHeat() {
+        BufferedImage image = new BufferedImage(this.nRows, this.nCols, 1);
+        WritableRaster raster = image.getRaster();
+        int[] color = new int[]{128, 128, 128};
+
+        for(int i = 0; i < this.nRows; ++i) {
+            for(int j = 0; j < this.nCols; ++j) {
+                if (this.getMax() == this.getMin()) {
+                    raster.setPixel(j, i, color);
+                } else {
+                    color[0] = 255;
+                    color[1] = (int)(255.0 - (this.values[i * this.nCols + j] - this.getMin()) / (this.getMax() - this.getMin()) * 255.0);//255 - color[0];
+                    color[2] = 0;
+                    raster.setPixel(j, i, color);
+                }
+            }
+        }
         return image;
     }
 
