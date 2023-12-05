@@ -8,12 +8,12 @@ import java.util.*;
 
 public class Layer {
     public String name;
-    private int nRows;
-    private int nCols;
-    private double[] origin = new double[2];
-    private double[] values;
-    private double resolution;
-    private static double nullValue;
+    public int nRows;
+    public int nCols;
+    public double[] origin = new double[2];
+    public double[] values;
+    public double resolution;
+    public static double nullValue;
 
     public Layer(String layerName, String fileName) {
         try {
@@ -202,16 +202,74 @@ public class Layer {
     }
 
     public Layer localSum(Layer inLayer, String outLayerName) {
-        Layer outLayer = new Layer(outLayerName, this.nRows, this.nCols, this.origin, this.resolution, nullValue);
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 
-        for(int i = 0; i < this.nRows * this.nCols; ++i) {
-            if (outLayer.values[i] != nullValue) {
-                outLayer.values[i] = this.values[i] + inLayer.values[i];
+        for (int i = 0; i < (nRows * nCols); i++){
+            if (outLayer.values[i] == nullValue){
+                continue;
+            }
+            else{
+                outLayer.values[i] = values[i] + inLayer.values[i];
             }
         }
-
         return outLayer;
     }
+	
+	public Layer localMax(Layer inLayer, String outLayerName) {
+	    Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+
+	    for (int i = 0; i < (nRows * nCols); i++) {
+	        if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
+	            outLayer.values[i] = nullValue;
+	        } 
+	        else {
+	            outLayer.values[i] = Math.max(this.values[i], inLayer.values[i]);
+	        }
+	    }
+	    return outLayer;
+	}
+	
+	public Layer localMin(Layer inLayer, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+
+	    for (int i = 0; i < (nRows * nCols); i++) {
+	        if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
+	            outLayer.values[i] = nullValue;
+	        } 
+	        else {
+	            outLayer.values[i] = Math.min(this.values[i], inLayer.values[i]);
+	        }
+	    }
+	    return outLayer;
+	}
+	
+	public Layer localMean(Layer inLayer, String outLayerName) {
+	    Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+
+	    for (int i = 0; i < (nRows * nCols); i++) {
+	        if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
+	            outLayer.values[i] = nullValue;
+	        } 
+	        else {
+	            outLayer.values[i] = (this.values[i] + inLayer.values[i]) / 2.0;
+	        }
+	    }
+	    return outLayer;
+	}
+	
+	public Layer localVariety(Layer inLayer, String outLayerName) {
+	    Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+
+	    for (int i = 0; i < (nRows * nCols); i++) {
+	        if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
+	            outLayer.values[i] = nullValue;
+	        } 
+	        else {
+	            outLayer.values[i] = Math.abs(this.values[i] - inLayer.values[i]);
+	        }
+	    }
+	    return outLayer;
+	}
 
     public Layer focalVariety(int radius, boolean isSquare, String outLayerName) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
