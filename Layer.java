@@ -8,12 +8,12 @@ import java.util.*;
 
 public class Layer {
     public String name;
-    private int nRows;
-    private int nCols;
-    private double[] origin = new double[2];
-    private double[] values;
-    private double resolution;
-    private static double nullValue;
+    public int nRows;
+    public int nCols;
+    public double[] origin = new double[2];
+    public double[] values;
+    public double resolution;
+    public static double nullValue;
 
     public Layer(String layerName, String fileName) {
         try {
