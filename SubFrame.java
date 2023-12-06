@@ -407,13 +407,6 @@ public class SubFrame extends MainFrame{
 //                outputPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
                     panel.add(outputPanel);
 
-//                    // Scale box
-//                    scPanel.setLayout(new FlowLayout());
-//                    scPanel.add(scLabel);
-//                    scPanel.add(scField);
-//                    scPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-//                    panel.add(scPanel);
-
                     // Operation drop down list
                     opPanel.setLayout(new FlowLayout());
                     opPanel.add(opLabel);
@@ -426,11 +419,10 @@ public class SubFrame extends MainFrame{
                     confirmButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            String inFile1 = inputField1.getText();
-                            String inFile2 = inputField2.getText();
-                            String outFile = outputField.getText();
-//                            String sScale = scField.getText();
-                            String op = opBox.getSelectedItem().toString();
+                            final String inFile1 = inputField1.getText();
+                            final String inFile2 = inputField2.getText();
+                            final String outFile = outputField.getText();
+                            final String op = opBox.getSelectedItem().toString();
 
                             toggleBox1.setSelected(true);
                             toggleBox2.setSelected(true);

@@ -37,6 +37,9 @@ public class MapPanel extends JPanel {
             case "Rainbow" ->{
                 return new MapPanel(layer.toImageRainbow(), layer, scale);
             }
+            case "Pastel" ->{
+                return new MapPanel(layer.toImagePastel(), layer, scale);
+            }
             default -> {
                 // Handle unexpected color values, you might want to throw an exception or return a default value
                 throw new IllegalArgumentException("Invalid color: " + color);

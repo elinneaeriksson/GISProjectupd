@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
@@ -15,6 +16,7 @@ public class Layer {
     public double[] values;
     public double resolution;
     public static double nullValue;
+    private double[] var7;
 
     public Layer(String layerName, String fileName) {
         try {
@@ -201,9 +203,9 @@ public class Layer {
                 if (this.getMax() == this.getMin()) {
                     raster.setPixel(j, i, color);
                 } else {
-                    float hue = (float)((1-(this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin()))*0.8); //0.9 avoids making both low and high values red
-                    float sat = 1;
-                    float bri = 1;
+                    float hue = (float)((this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin())*0.9); //0.9 avoids making both low and high values red
+                    int sat = 1;
+                    int bri = 1;
                     int rgb = Color.HSBtoRGB(hue,sat,bri);
                     color[0] = (rgb >> 16) &0xFF;
                     color[1] = (rgb >> 8) &0xFF;
@@ -224,7 +226,7 @@ public class Layer {
                 if (this.getMax() == this.getMin()) {
                     raster.setPixel(j, i, color);
                 } else {
-                    float hue = (float)((1-(this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin()))*0.8); //0.9 avoids making both low and high val
+                    float hue = (float)(((this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin()))*0.9); //0.9 avoids making both low and high val
                     float sat = (float) 0.7;
                     float bri = (float) 0.9;
                     int rgb = Color.HSBtoRGB(hue,sat,bri);
@@ -276,83 +278,123 @@ public class Layer {
         }
         return image;
     }
-    public Layer localSum(Layer inLayer, String outLayerName) {
+    public Layer localSum(Layer inLayer, String outLayerName, JProgressBar progressBar) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 
+        int totalSteps = nRows * nCols;
         for (int i = 0; i < (nRows * nCols); i++){
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
             if (outLayer.values[i] == nullValue){
                 continue;
             }
             else{
                 outLayer.values[i] = values[i] + inLayer.values[i];
             }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
         }
         return outLayer;
     }
-	
-	public Layer localMax(Layer inLayer, String outLayerName) {
+
+	public Layer localMax(Layer inLayer, String outLayerName, JProgressBar progressBar) {
 	    Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 
-	    for (int i = 0; i < (nRows * nCols); i++) {
-	        if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
+        int totalSteps = nRows * nCols;
+        for (int i = 0; i < (nRows * nCols); i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
+            if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
 	            outLayer.values[i] = nullValue;
-	        } 
+	        }
 	        else {
 	            outLayer.values[i] = Math.max(this.values[i], inLayer.values[i]);
 	        }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
 	    }
 	    return outLayer;
 	}
-	
-	public Layer localMin(Layer inLayer, String outLayerName) {
+
+	public Layer localMin(Layer inLayer, String outLayerName, JProgressBar progressBar) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 
-	    for (int i = 0; i < (nRows * nCols); i++) {
-	        if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
+        int totalSteps = nRows * nCols;
+        for (int i = 0; i < (nRows * nCols); i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
+            if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
 	            outLayer.values[i] = nullValue;
-	        } 
+	        }
 	        else {
 	            outLayer.values[i] = Math.min(this.values[i], inLayer.values[i]);
 	        }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
 	    }
 	    return outLayer;
 	}
-	
-	public Layer localMean(Layer inLayer, String outLayerName) {
+
+	public Layer localMean(Layer inLayer, String outLayerName, JProgressBar progressBar) {
 	    Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 
-	    for (int i = 0; i < (nRows * nCols); i++) {
-	        if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
+        int totalSteps = nRows * nCols;
+        for (int i = 0; i < (nRows * nCols); i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
+            if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
 	            outLayer.values[i] = nullValue;
-	        } 
+	        }
 	        else {
 	            outLayer.values[i] = (this.values[i] + inLayer.values[i]) / 2.0;
 	        }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
 	    }
 	    return outLayer;
 	}
-	
-	public Layer localVariety(Layer inLayer, String outLayerName) {
+
+	public Layer localVariety(Layer inLayer, String outLayerName, JProgressBar progressBar) {
 	    Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 
-	    for (int i = 0; i < (nRows * nCols); i++) {
-	        if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
+        int totalSteps = nRows * nCols;
+        for (int i = 0; i < (nRows * nCols); i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
+            if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
 	            outLayer.values[i] = nullValue;
-	        } 
+	        }
 	        else {
 	            outLayer.values[i] = Math.abs(this.values[i] - inLayer.values[i]);
 	        }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
 	    }
 	    return outLayer;
 	}
 
-    public Layer focalVariety(int radius, boolean isSquare, String outLayerName) {
+    public Layer focalVariety(int radius, boolean isSquare, String outLayerName, JProgressBar progressBar) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[nRows*nCols];
 
+        int totalSteps = nRows * nCols;
+        int s = 0;
         // Iterate every cell
         for (int i = 0; i < nRows; i++){
             for (int j = 0; j < nCols; j++){
+                final int progress = (int) ((s / (double) totalSteps * 100 + 1));
+                s++;
+
                 // Get neighborhood indices
                 int[] neighborIndices = getNeighborhood(i*nCols+j, radius, isSquare);
 
@@ -365,17 +407,26 @@ public class Layer {
                 }
                 // Focal variety value
                 outLayer.values[i*nCols+j] = countUniqueValues(neighborValues); // Null value handled here
+
+                progressBar.setValue(progress);
+                progressBar.update(progressBar.getGraphics());
+                progressBar.setString("Processing: " + progress + "%");
             }
         }
         return outLayer;
     }
 
-    public Layer focalMaximum(int radius, boolean isSquare, String outLayerName){
+    public Layer focalMaximum(int radius, boolean isSquare, String outLayerName, JProgressBar progressBar){
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[nRows*nCols];
 
+        int totalSteps = nRows * nCols;
+        int s = 0;
         for (int i = 0; i < nRows; i++){
             for (int j = 0; j < nCols; j++){
+                final int progress = (int) ((s / (double) totalSteps * 100 + 1));
+                s++;
+
                 // Get neighborhood indices
                 int[] neighborIndices = getNeighborhood(i*nCols+j, radius, isSquare);
 
@@ -388,12 +439,16 @@ public class Layer {
                 }
                 // Focal maximum value
                 outLayer.values[i*nCols+j] = getMax(neighborValues);
+
+                progressBar.setValue(progress);
+                progressBar.update(progressBar.getGraphics());
+                progressBar.setString("Processing: " + progress + "%");
             }
         }
         return outLayer;
     }
 
-    public Layer focalMinimum(int radius, boolean isSquare, String outLayerName){
+    public Layer focalMinimum(int radius, boolean isSquare, String outLayerName, JProgressBar progressBar){
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[nRows*nCols];
 
@@ -416,12 +471,17 @@ public class Layer {
         return outLayer;
     }
 
-    public Layer focalSum(int radius, boolean isSquare, String outLayerName){
+    public Layer focalSum(int radius, boolean isSquare, String outLayerName, JProgressBar progressBar){
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[nRows*nCols];
 
+        int totalSteps = nRows * nCols;
+        int s = 0;
         for (int i = 0; i < nRows; i++){
             for (int j = 0; j < nCols; j++){
+                final int progress = (int) ((s / (double) totalSteps * 100 + 1));
+                s++;
+
                 // Get neighborhood indices
                 int[] neighborIndices = getNeighborhood(i*nCols+j, radius, isSquare);
 
@@ -441,17 +501,26 @@ public class Layer {
                         continue;
                 }
                 outLayer.values[i*nCols+j] = sum;
+
+                progressBar.setValue(progress);
+                progressBar.update(progressBar.getGraphics());
+                progressBar.setString("Processing: " + progress + "%");
             }
         }
         return outLayer;
     }
 
-    public Layer focalMean(int radius, boolean isSquare, String outLayerName){
+    public Layer focalMean(int radius, boolean isSquare, String outLayerName, JProgressBar progressBar){
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[nRows*nCols];
 
+        int totalSteps = nRows * nCols;
+        int s = 0;
         for (int i = 0; i < nRows; i++){
             for (int j = 0; j < nCols; j++){
+                final int progress = (int) ((s / (double) totalSteps * 100 + 1));
+                s++;
+
                 // Get neighborhood indices
                 int[] neighborIndices = getNeighborhood(i*nCols+j, radius, isSquare);
 
@@ -472,44 +541,24 @@ public class Layer {
                         l -= 1;
                 }
                 outLayer.values[i*nCols+j] = sum / l;
+
+                progressBar.setValue(progress);
+                progressBar.update(progressBar.getGraphics());
+                progressBar.setString("Processing: " + progress + "%");
             }
         }
         return outLayer;
     }
-    /*
-    public Layer zonalMinimum(Layer inLayer, String outLayerName) {
-        Layer outLayer = new Layer(outLayerName, this.nRows, this.nCols, this.origin, this.resolution, nullValue);
-        outLayer.values = new double[this.nRows * this.nCols];
-        HashMap<Double, Double> zone_min = new HashMap();
 
-        int i;
-        int j;
-        for(i = 0; i < this.nRows; ++i) {
-            for(j = 0; j < this.nCols; ++j) {
-                double zone = inLayer.values[i * this.nCols + j];
-                if (!zone_min.containsKey(zone)) {
-                    zone_min.put(zone, this.values[i * this.nCols + j]);
-                } else if ((Double)zone_min.get(zone) > this.values[i * this.nCols + j]) {
-                    zone_min.put(zone, this.values[i * this.nCols + j]);
-                }
-            }
-        }
-
-        for(i = 0; i < this.nRows; ++i) {
-            for(j = 0; j < this.nCols; ++j) {
-                outLayer.values[i * this.nCols + j] = (Double)zone_min.get(inLayer.values[i * this.nCols + j]);
-            }
-        }
-
-        return outLayer;
-    }
-    */
-    public Layer zonalMinimum(Layer inLayer, String outLayerName) { // Changed to one dimensional array
+    public Layer zonalMinimum(Layer inLayer, String outLayerName, JProgressBar progressBar) { // Changed to one dimensional array
         Layer outLayer = new Layer(outLayerName, this.nRows, this.nCols, this.origin, this.resolution, nullValue);
         outLayer.values = new double[this.nRows * this.nCols];
         HashMap<Double, Double> zone_min = new HashMap<>();
 
+        int totalSteps = nRows * nCols;
         for (int i = 0; i < this.nRows*this.nCols; i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
             double zone = inLayer.values[i];
             if (zone==nullValue) {
                 zone_min.put(zone, nullValue);
@@ -525,6 +574,9 @@ public class Layer {
                         continue;
                     }
             }
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
         }
 
         for (int i = 0; i < this.nRows*this.nCols; i++) {
@@ -539,27 +591,34 @@ public class Layer {
         return outLayer;
     }
 
-    public Layer zonalMaximum(Layer inLayer, String outLayerName) {
+    public Layer zonalMaximum(Layer inLayer, String outLayerName, JProgressBar progressBar) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[this.nRows*this.nCols];
-
         HashMap<Double, Double> zone_max = new HashMap<>();
+
+        int totalSteps = nRows * nCols;
         for (int i = 0; i < this.nRows*this.nCols; i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
             double zone = inLayer.values[i];
             if (zone==nullValue) {
                 zone_max.put(zone, nullValue);
             }
             else if(!zone_max.containsKey(zone)) {
+                zone_max.put(zone, this.values[i]);
+            }
+            else {
+                if (zone_max.get(zone) < this.values[i]) {
                     zone_max.put(zone, this.values[i]);
                 }
                 else {
-                    if (zone_max.get(zone) < this.values[i]) {
-                        zone_max.put(zone, this.values[i]);
-                    }
-                    else {
-                        continue;
-                    }
+                    continue;
+                }
             }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
         }
 
         for (int i = 0; i < this.nRows*this.nCols; i++) {
@@ -570,11 +629,10 @@ public class Layer {
                 outLayer.values[i] = zone_max.get(inLayer.values[i]);
             }
         }
-
         return outLayer;
     }
 
-    public Layer zonalMean(Layer inLayer, String outLayerName) {
+    public Layer zonalMean(Layer inLayer, String outLayerName, JProgressBar progressBar) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[this.nRows*this.nCols];
 
@@ -582,7 +640,10 @@ public class Layer {
         HashMap<Double, Integer> zone_mean_length = new HashMap<>(); // Keeps track of the number of values in each zone
 
         // Assigning cells to zones
+        int totalSteps = nRows * nCols;
         for (int i = 0; i < this.nRows*this.nCols; i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
             double zone = inLayer.values[i];
             if (zone==nullValue) {
                 zone_mean.put(zone, nullValue);
@@ -597,6 +658,10 @@ public class Layer {
                     zone_mean.put(zone, sum);
                     zone_mean_length.put(zone, zoneLength);
             }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
         }
 
         // Calculate zonal mean
@@ -618,13 +683,16 @@ public class Layer {
         return outLayer;
     }
 
-    public Layer zonalSum(Layer zoneLayer, String outLayerName) {
+    public Layer zonalSum(Layer zoneLayer, String outLayerName, JProgressBar progressBar) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[this.nRows*this.nCols];
 
         HashMap<Double, Double> zone_sum = new HashMap<>();
 
+        int totalSteps = nRows * nCols;
         for (int i = 0; i < this.nRows*this.nCols; i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
             double zone = zoneLayer.values[i];
             if (zone==nullValue) { //if NoData
                 zone_sum.put(zone, nullValue); //is this necessary
@@ -635,6 +703,10 @@ public class Layer {
             else { //already visited zone
                 zone_sum.put(zone, (zone_sum.get(zone) + this.values[i]));
             }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
         }
 
         for (int i = 0; i < this.nRows*this.nCols; i++) {
@@ -645,16 +717,20 @@ public class Layer {
                 outLayer.values[i] = zone_sum.get(zoneLayer.values[i]);
             }
         }
+
         return outLayer;
     }
 
-    public Layer zonalVariety(Layer zoneLayer, String outLayerName) {
+    public Layer zonalVariety(Layer zoneLayer, String outLayerName, JProgressBar progressBar) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[this.nRows*this.nCols];
 
         HashMap<Double, Set<Double>> zone_var = new HashMap<>();
 
+        int totalSteps = nRows * nCols;
         for (int i = 0; i < this.nRows*this.nCols; i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
+
             double zone = zoneLayer.values[i];
             if (zone==nullValue) { //if NoData
                 Set nullSet = new HashSet<Double>();
@@ -670,6 +746,10 @@ public class Layer {
                 zoneSet.add(this.values[i]);
                 zone_var.put(zone, zoneSet);
             }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
         }
 
         for (int i = 0; i < this.nRows*this.nCols; i++) {
