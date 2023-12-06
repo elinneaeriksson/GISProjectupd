@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ public class Layer {
     public double[] values;
     public double resolution;
     public static double nullValue;
+    private double[] var7;
 
     public Layer(String layerName, String fileName) {
         try {
@@ -21,7 +23,7 @@ public class Layer {
             FileReader fReader = new FileReader(rFile);
             BufferedReader bReader = new BufferedReader(fReader);
             this.name = layerName;
-            String[] text = bReader.readLine().split(" ");
+            String[] text = bReader.readLine().toLowerCase().split(" ");
             this.nCols = Integer.parseInt(text[text.length - 1]);
             text = bReader.readLine().split(" ");
             this.nRows = Integer.parseInt(text[text.length - 1]);
@@ -37,13 +39,26 @@ public class Layer {
             int count = 0;
 
             for(String textValue = bReader.readLine(); textValue != null; textValue = bReader.readLine()) {
+                if (textValue.trim().isEmpty()) { //handling empty lines
+                    continue;
+                }
                 String[] stringValue = textValue.split(" ");
                 String[] var10 = stringValue;
                 int var11 = stringValue.length;
 
                 for(int var12 = 0; var12 < var11; ++var12) {
                     String s = var10[var12];
-                    this.values[count] = Double.parseDouble(s);
+                    if (s.contains(",")) {  //this section swaps commas if necessarry
+                        char[] valueArr =  s.toCharArray();
+                        for (int i = 0; i < valueArr.length; ++i) {
+                            if (valueArr[i] == ',') {
+                                valueArr[i] = '.';
+                                break;
+                            }
+                        }
+                        s = new String(valueArr);
+                    }
+                    this.values[count] = Double.parseDouble(s); //could change to var12
                     ++count;
                 }
             }
@@ -111,37 +126,121 @@ public class Layer {
                     fWriter.write("\n");
                 }
             }
-
             fWriter.close();
         } catch (Exception var5) {
             var5.printStackTrace();
         }
-
     }
 
     public BufferedImage toImage() {
-        BufferedImage image = new BufferedImage(this.nRows, this.nCols, 1);
+        BufferedImage image = new BufferedImage(this.nCols, this.nRows ,1);
         WritableRaster raster = image.getRaster();
         int[] color = new int[]{128, 128, 128};
 
         for(int i = 0; i < this.nRows; ++i) {
             for(int j = 0; j < this.nCols; ++j) {
                 if (this.getMax() == this.getMin()) {
-                    raster.setPixel(j, i, color);
+                    raster.setPixel(j,i,color);
                 } else {
-                    color[0] = (int)(255.0 - (this.values[i * this.nCols + j] - this.getMin()) / (this.getMax() - this.getMin()) * 255.0);
+                    color[0] = (int)(255.0 - (this.values[i * this.nCols + j]- this.getMin()) / (this.getMax() - this.getMin()) * 255.0);
                     color[1] = color[0];
                     color[2] = color[0];
+                    raster.setPixel(j,i,color);
+                }
+            }
+        }
+        return image;
+    }
+
+    //this can be used to
+    public BufferedImage toImageHeat() {
+        BufferedImage image = new BufferedImage(this.nCols,this.nRows, 1);
+        WritableRaster raster = image.getRaster();
+        int[] color = new int[3];
+
+        for(int i = 0; i < this.nRows; ++i) {
+            for(int j = 0; j < this.nCols; ++j) {
+                if (this.getMax() == this.getMin()) {
+                    raster.setPixel(j, i, color);
+                } else {
+                    color[0] = 255;
+                    color[1] = (int)(255.0 - (this.values[i * this.nCols + j] - this.getMin()) / (this.getMax() - this.getMin()) * 255.0);//255 - color[0];
+                    color[2] = 0;
                     raster.setPixel(j, i, color);
                 }
             }
         }
+        return image;
+    }
 
+    public BufferedImage toImageCool() {
+        BufferedImage image = new BufferedImage(this.nCols,this.nRows, 1);
+        WritableRaster raster = image.getRaster();
+        int[] color = new int[3];
+
+        for(int i = 0; i < this.nRows; ++i) {
+            for(int j = 0; j < this.nCols; ++j) {
+                if (this.getMax() == this.getMin()) {
+                    raster.setPixel(j, i, color);
+                } else {
+                    color[0] = 0;
+                    color[1] = (int)(255.0 - (this.values[i * this.nCols + j] - this.getMin()) / (this.getMax() - this.getMin()) * 255.0);//255 - color[0];
+                    color[2] = 255;
+                    raster.setPixel(j, i, color);
+                }
+            }
+        }
+        return image;
+    }
+
+    public BufferedImage toImageRainbow() {
+        BufferedImage image = new BufferedImage(this.nCols,this.nRows, 1);
+        WritableRaster raster = image.getRaster();
+        int[] color = new int[3];
+        for(int i = 0; i < this.nRows; ++i) {
+            for(int j = 0; j < this.nCols; ++j) {
+                if (this.getMax() == this.getMin()) {
+                    raster.setPixel(j, i, color);
+                } else {
+                    float hue = (float)((this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin())*0.9); //0.9 avoids making both low and high values red
+                    int sat = 1;
+                    int bri = 1;
+                    int rgb = Color.HSBtoRGB(hue,sat,bri);
+                    color[0] = (rgb >> 16) &0xFF;
+                    color[1] = (rgb >> 8) &0xFF;
+                    color[2] = rgb &0xFF;
+                    raster.setPixel(j, i, color);
+                }
+            }
+        }
+        return image;
+    }
+
+    public BufferedImage toImagePastel() {
+        BufferedImage image = new BufferedImage(this.nCols,this.nRows, 1);
+        WritableRaster raster = image.getRaster();
+        int[] color = new int[3];
+        for(int i = 0; i < this.nRows; ++i) {
+            for(int j = 0; j < this.nCols; ++j) {
+                if (this.getMax() == this.getMin()) {
+                    raster.setPixel(j, i, color);
+                } else {
+                    float hue = (float)(((this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin()))*0.9); //0.9 avoids making both low and high val
+                    float sat = (float) 0.7;
+                    float bri = (float) 0.9;
+                    int rgb = Color.HSBtoRGB(hue,sat,bri);
+                    color[0] = (rgb >> 16) &0xFF;
+                    color[1] = (rgb >> 8) &0xFF;
+                    color[2] = rgb &0xFF;
+                    raster.setPixel(j, i, color);
+                }
+            }
+        }
         return image;
     }
 
     public BufferedImage toImage(double[] highlight) {
-        BufferedImage image = new BufferedImage(this.nRows, this.nCols, 1);
+        BufferedImage image = new BufferedImage(this.nCols, this.nRows, 1);
         WritableRaster raster = image.getRaster();
         Random random = new Random();
         int[][] hColors = new int[highlight.length][3];
@@ -151,7 +250,6 @@ public class Layer {
 
         int index;
         for(index = 0; index < var8; ++index) {
-            double var10000 = var7[index];
             hColors[count][0] = random.nextInt(256);
             hColors[count][1] = random.nextInt(256);
             hColors[count][2] = random.nextInt(256);
@@ -168,7 +266,7 @@ public class Layer {
                     colors[0] = hColors[index][0];
                     colors[1] = hColors[index][1];
                     colors[2] = hColors[index][2];
-                    raster.setPixel(j, i, colors);
+                    raster.setPixel(j,i, colors);
                 } else {
                     colors[0] = otherColor[0];
                     colors[1] = otherColor[1];
@@ -179,7 +277,6 @@ public class Layer {
         }
         return image;
     }
-
     public Layer localSum(Layer inLayer, String outLayerName) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 

@@ -12,6 +12,8 @@ public class MainFrame extends JFrame{
     public static JCheckBox toggleBox3 = new JCheckBox("Result");
     public JTextArea messageBox = new JTextArea("Message");
     private final JLayeredPane layeredPane = new JLayeredPane();
+    String[] choices = { "Black and White", "Cool", "Heat", "Rainbow"};
+    private final JComboBox<String> colorBox = new JComboBox(choices);
 
     public MainFrame(){
         setTitle("App");
@@ -67,9 +69,22 @@ public class MainFrame extends JFrame{
         gridBag.setConstraints(toggleBox1, c);
         buttonPanel.add(toggleBox1);
 
-        c.ipady = 150;
+        c.ipady = 10;
         c.gridx = 0;
         c.gridy = 6;
+        JLabel cLabel = new JLabel("Change colors");
+        gridBag.setConstraints(cLabel, c);
+        buttonPanel.add(cLabel);
+
+        c.ipady = 5;
+        c.gridx = 0;
+        c.gridy = 7;
+        gridBag.setConstraints(colorBox, c);
+        buttonPanel.add(colorBox);
+
+        c.ipady = 150;
+        c.gridx = 0;
+        c.gridy = 8;
 
         JScrollPane scrollPane = new JScrollPane(messageBox);
         gridBag.setConstraints(scrollPane, c);
@@ -166,24 +181,53 @@ public class MainFrame extends JFrame{
         repaint();
     }
 
+    public void changeLayeredPane(MapPanel inMap1, MapPanel inMap2, MapPanel outMap) {
+        int width = layeredPane.getWidth();
+        int height = layeredPane.getHeight();
+        // Set bounds before adding to pane
+        inMap1.setBounds(0, 0, width, height);
+        inMap2.setBounds(0, 0, width, height);
+        outMap.setBounds(0, 0, width, height);
+        layeredPane.removeAll();
+        layeredPane.add(inMap1, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(inMap2, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(outMap, JLayeredPane.MODAL_LAYER);
+
+        // Update the layout
+        layeredPane.revalidate();
+        layeredPane.repaint();
+    }
+
     public void mapEvents(){
-        toggleBox1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inMap1.setVisible(!inMap1.isVisible());
-            }
-        });
-        toggleBox2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inMap2.setVisible(!inMap2.isVisible());
-            }
-        });
-        toggleBox3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                outMap.setVisible(!outMap.isVisible());
-            }
+        SwingUtilities.invokeLater(() -> {
+            // Swing operations here
+            toggleBox1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    inMap1.setVisible(!inMap1.isVisible());
+                }
+            });
+            toggleBox2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    inMap2.setVisible(!inMap2.isVisible());
+                }
+            });
+            toggleBox3.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    outMap.setVisible(!outMap.isVisible());
+                }
+            });
+
+            colorBox.addActionListener(e -> {
+                String color = colorBox.getSelectedItem().toString();
+                inMap1 = inMap1.changeMapColor(inMap1, color, inMap1.scale);
+                inMap2 = inMap2.changeMapColor(inMap2, color, inMap2.scale);
+                outMap = outMap.changeMapColor(outMap, color, outMap.scale);
+                changeLayeredPane(inMap1, inMap2, outMap);
+            });
+
         });
 
         revalidate();

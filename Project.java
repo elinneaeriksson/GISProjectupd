@@ -25,13 +25,13 @@ public class Project {
         int map = (int) Math.max(inLayer1.nRows, inLayer1.nCols);
         int scale = frame / map;
 //        System.out.println(frame+" "+map+" "+scale);
-        inMap1 = new MapPanel(inLayer1.toImage(), scale);
-        inMap2 = new MapPanel(inLayer2.toImage(), scale);
+        inMap1 = new MapPanel(inLayer1.toImage(), inLayer1, scale);
+        inMap2 = new MapPanel(inLayer2.toImage(), inLayer2, scale);
 
         switch (operation){
             case "Maximum" -> {
                 outLayer = inLayer1.localMax(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
@@ -39,7 +39,7 @@ public class Project {
             }
             case "Minimum" -> {
                 outLayer = inLayer1.localMin(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
@@ -47,7 +47,7 @@ public class Project {
             }
             case "Sum" -> {
                 outLayer = inLayer1.localSum(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
@@ -55,7 +55,7 @@ public class Project {
             }
             case "Mean" -> {
                 outLayer = inLayer1.localMean(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 mainFrame.showMessage(in1+"\n"+in2 + "\n\nLocal mean.\n\nOutput file created at path: " + out + ".");
@@ -63,7 +63,7 @@ public class Project {
             }
             case "Variety" -> {
                 outLayer = inLayer1.localVariety(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
@@ -88,12 +88,12 @@ public class Project {
         else
             isSquare = false;
 
-        inMap = new MapPanel(inLayer.toImage(), scale);
+        inMap = new MapPanel(inLayer.toImage(), inLayer, scale);
 
         switch (operation){
             case "Maximum" -> {
                 outLayer = inLayer.focalMaximum(rad, isSquare, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -101,7 +101,7 @@ public class Project {
             }
             case "Minimum" -> {
                 outLayer = inLayer.focalMinimum(rad, isSquare, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -109,7 +109,7 @@ public class Project {
             }
             case "Sum" -> {
                 outLayer = inLayer.focalSum(rad, isSquare, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -117,7 +117,7 @@ public class Project {
             }
             case "Mean" -> {
                 outLayer = inLayer.focalMean(rad, isSquare, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -125,7 +125,7 @@ public class Project {
             }
             case "Variety" -> {
                 outLayer = inLayer.focalVariety(rad, isSquare, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -142,13 +142,13 @@ public class Project {
         int frame = Math.min(mainFrame.getMapPanel().getWidth(), mainFrame.getMapPanel().getHeight());
         int map = (int) Math.max(inLayer1.nRows, inLayer1.nCols);
         int scale = frame / map;
-        inMap1 = new MapPanel(inLayer1.toImage(), scale);
-        inMap2 = new MapPanel(inLayer2.toImage(), scale);
+        inMap1 = new MapPanel(inLayer1.toImage(), inLayer1, scale);
+        inMap2 = new MapPanel(inLayer2.toImage(), inLayer2, scale);
 
         switch (operation){
             case "Maximum" -> {
                 outLayer = inLayer1.zonalMaximum(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
@@ -156,7 +156,7 @@ public class Project {
             }
             case "Minimum" -> {
                 outLayer = inLayer1.zonalMinimum(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
@@ -164,7 +164,7 @@ public class Project {
             }
             case "Sum" -> {
                 outLayer = inLayer1.zonalSum(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale);
                 outLayer.save(out);
@@ -172,7 +172,7 @@ public class Project {
             }
             case "Mean" -> {
                 outLayer = inLayer1.zonalMean(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
@@ -180,7 +180,7 @@ public class Project {
             }
             case "Variety" -> {
                 outLayer = inLayer1.zonalVariety(inLayer2, "");
-                outMap = new MapPanel(outLayer.toImage(), scale);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
