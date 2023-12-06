@@ -11,7 +11,7 @@ public class Ex03 {
 
     public static void displayRaster(Layer outLayer, int scale) {
         JFrame appFrame = new JFrame();
-        BufferedImage image = outLayer.toImage();
+        BufferedImage image = outLayer.toImagePastel();
         MapPanel myMapPanel = new MapPanel(image, scale);
 
         Dimension dimension = new Dimension(scale * outLayer.getnCols(),scale * outLayer.getnRows());
