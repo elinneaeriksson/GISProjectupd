@@ -113,7 +113,6 @@ public class Layer {
             }
 
             fWriter.close();
-            System.out.println("File created.");
         } catch (Exception var5) {
             var5.printStackTrace();
         }
