@@ -15,7 +15,6 @@ public class Layer {
     public double[] values;
     public double resolution;
     public static double nullValue;
-    private double[] var7;
 
     public Layer(String layerName, String fileName) {
         try {
@@ -202,9 +201,9 @@ public class Layer {
                 if (this.getMax() == this.getMin()) {
                     raster.setPixel(j, i, color);
                 } else {
-                    float hue = (float)((this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin())*0.9); //0.9 avoids making both low and high values red
-                    int sat = 1;
-                    int bri = 1;
+                    float hue = (float)((1-(this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin()))*0.8); //0.9 avoids making both low and high values red
+                    float sat = 1;
+                    float bri = 1;
                     int rgb = Color.HSBtoRGB(hue,sat,bri);
                     color[0] = (rgb >> 16) &0xFF;
                     color[1] = (rgb >> 8) &0xFF;
@@ -225,7 +224,7 @@ public class Layer {
                 if (this.getMax() == this.getMin()) {
                     raster.setPixel(j, i, color);
                 } else {
-                    float hue = (float)(((this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin()))*0.9); //0.9 avoids making both low and high val
+                    float hue = (float)((1-(this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin()))*0.8); //0.9 avoids making both low and high val
                     float sat = (float) 0.7;
                     float bri = (float) 0.9;
                     int rgb = Color.HSBtoRGB(hue,sat,bri);
