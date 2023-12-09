@@ -1,9 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
-import java.util.Map;
 
-class ImageComboBoxRenderer extends DefaultListCellRenderer {
+public class ImageComboBoxRenderer extends DefaultListCellRenderer {
     private final HashMap<String, Icon> itemImageMap;
 
     public ImageComboBoxRenderer(HashMap<String, Icon> itemImageMap) {

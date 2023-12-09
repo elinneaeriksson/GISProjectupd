@@ -1,10 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 public class MainFrame extends JFrame{
-    public MapPanel inMap1, inMap2, outMap;
+    public static MapPanel inMap1, inMap2, outMap;
     private Project project;
     private final JPanel mapPanel = new JPanel();
     public static JCheckBox toggleBox1 = new JCheckBox("Layer 1");
@@ -12,8 +12,9 @@ public class MainFrame extends JFrame{
     public static JCheckBox toggleBox3 = new JCheckBox("Result");
     public JTextArea messageBox = new JTextArea("Message");
     private final JLayeredPane layeredPane = new JLayeredPane();
-    String[] choices = { "Black and White", "Cool", "Heat", "Rainbow"};
-    private final JComboBox<String> colorBox = new JComboBox(choices);
+    HashMap<String, Icon> itemImageMap = new HashMap<>();
+    private final JComboBox<String> colorBox = new JComboBox<>(new String[] { "Black and White", "Cool", "Heat", "Rainbow" });
+    public static final JProgressBar progressBar = new JProgressBar(0, 100);
 
     public MainFrame(){
         setTitle("App");
@@ -81,16 +82,27 @@ public class MainFrame extends JFrame{
         c.gridy = 7;
         gridBag.setConstraints(colorBox, c);
         buttonPanel.add(colorBox);
+        itemImageMap.put("Black and White", new ImageIcon("./icons/bw.png"));
+        itemImageMap.put("Cool", new ImageIcon("./icons/cool.png"));
+        itemImageMap.put("Heat", new ImageIcon("./icons/heat.png"));
+        itemImageMap.put("Rainbow", new ImageIcon("./icons/rainbow.png"));
+        colorBox.setRenderer(new ImageComboBoxRenderer(itemImageMap));
 
         c.ipady = 150;
         c.gridx = 0;
         c.gridy = 8;
-
         JScrollPane scrollPane = new JScrollPane(messageBox);
         gridBag.setConstraints(scrollPane, c);
         messageBox.setLineWrap(true);
         messageBox.setWrapStyleWord(true);
         buttonPanel.add(scrollPane);
+
+        c.ipady = 5;
+        c.gridx = 0;
+        c.gridy = 9;
+        gridBag.setConstraints(progressBar, c);
+        progressBar.setStringPainted(true);
+        buttonPanel.add(progressBar);
 
         add(buttonPanel);
 
@@ -101,6 +113,7 @@ public class MainFrame extends JFrame{
 
         mapEvents();
 
+        setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
@@ -122,18 +135,20 @@ public class MainFrame extends JFrame{
     }
 
     public void setMaps(MapPanel inMap, MapPanel outMap){
-        this.inMap1 = inMap;
-        this.outMap = outMap;
+        inMap1 = inMap;
+        MainFrame.outMap = outMap;
     }
 
     public void setMaps(MapPanel inMap1, MapPanel inMap2, MapPanel outMap){
-        this.inMap1 = inMap1;
-        this.inMap2 = inMap2;
-        this.outMap = outMap;
+        MainFrame.inMap1 = inMap1;
+        MainFrame.inMap2 = inMap2;
+        MainFrame.outMap = outMap;
     }
 
     public void addMap(int rows, int cols, int scale){
+        colorBox.setSelectedItem("Black and White");
         layeredPane.removeAll();
+
         int width = cols * scale;
         int height = rows * scale;
         inMap1.setBounds(0, 0, width, height);
@@ -145,6 +160,7 @@ public class MainFrame extends JFrame{
         inMap1.setVisible(true);
         outMap.setVisible(true);
 
+        // Center layeredPane
         mapPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -156,7 +172,9 @@ public class MainFrame extends JFrame{
     }
 
     public void addMap(int rows, int cols, int scale, int inLayers){
+        colorBox.setSelectedItem("Black and White");
         layeredPane.removeAll();
+
         int width = cols * scale;
         int height = rows * scale;
         inMap1.setBounds(0, 0, width, height);
@@ -171,6 +189,7 @@ public class MainFrame extends JFrame{
         inMap2.setVisible(true);
         outMap.setVisible(true);
 
+        // Center layeredPane
         mapPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -181,17 +200,24 @@ public class MainFrame extends JFrame{
         repaint();
     }
 
-    public void changeLayeredPane(MapPanel inMap1, MapPanel inMap2, MapPanel outMap) {
+    public void renewMap(MapPanel inMap1, MapPanel inMap2, MapPanel outMap) {
         int width = layeredPane.getWidth();
         int height = layeredPane.getHeight();
+
         // Set bounds before adding to pane
         inMap1.setBounds(0, 0, width, height);
-        inMap2.setBounds(0, 0, width, height);
+        if (!(inMap2 == null))
+            inMap2.setBounds(0, 0, width, height);
         outMap.setBounds(0, 0, width, height);
+
         layeredPane.removeAll();
         layeredPane.add(inMap1, JLayeredPane.DEFAULT_LAYER);
-        layeredPane.add(inMap2, JLayeredPane.PALETTE_LAYER);
-        layeredPane.add(outMap, JLayeredPane.MODAL_LAYER);
+        if (!(inMap2 == null)){
+            layeredPane.add(inMap2, JLayeredPane.PALETTE_LAYER);
+            layeredPane.add(outMap, JLayeredPane.MODAL_LAYER);
+        }
+        else
+            layeredPane.add(outMap, JLayeredPane.PALETTE_LAYER);
 
         // Update the layout
         layeredPane.revalidate();
@@ -204,28 +230,42 @@ public class MainFrame extends JFrame{
             toggleBox1.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    inMap1.setVisible(!inMap1.isVisible());
+                    if (inMap1 != null)
+                        inMap1.setVisible(!inMap1.isVisible());
+                    else
+                        JOptionPane.showMessageDialog(null, "This layer is empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             toggleBox2.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    inMap2.setVisible(!inMap2.isVisible());
+                    if (inMap2 != null)
+                        inMap2.setVisible(!inMap2.isVisible());
+                    else
+                        JOptionPane.showMessageDialog(null, "This layer is empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             toggleBox3.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    outMap.setVisible(!outMap.isVisible());
+                    if (outMap != null)
+                        outMap.setVisible(!outMap.isVisible());
+                    else
+                        JOptionPane.showMessageDialog(null, "This layer is empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
 
             colorBox.addActionListener(e -> {
-                String color = colorBox.getSelectedItem().toString();
-                inMap1 = inMap1.changeMapColor(inMap1, color, inMap1.scale);
-                inMap2 = inMap2.changeMapColor(inMap2, color, inMap2.scale);
-                outMap = outMap.changeMapColor(outMap, color, outMap.scale);
-                changeLayeredPane(inMap1, inMap2, outMap);
+                if(inMap1==null)
+                    JOptionPane.showMessageDialog(null, "Map Panel is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                else{
+                    String color = colorBox.getSelectedItem().toString();
+                    inMap1 = inMap1.changeMapColor(inMap1, color, inMap1.scale);
+                    if (!(inMap2 == null))
+                        inMap2 = inMap2.changeMapColor(inMap2, color, inMap2.scale);
+                    outMap = outMap.changeMapColor(outMap, color, outMap.scale);
+                    renewMap(inMap1, inMap2, outMap);
+                }
             });
 
         });

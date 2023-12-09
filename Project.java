@@ -1,9 +1,10 @@
+import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
 
 public class Project {
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
     public Project(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -17,6 +18,10 @@ public class Project {
     }
 
     public void localOperation(String in1, String in2, String out, String operation){
+        String[] s1 = in1.split("\\\\");
+        String name1 = s1[s1.length-1].substring(0, s1[s1.length-1].length()-4);
+        String[] s2 = in2.split("\\\\");
+        String name2 = s2[s2.length-1].substring(0, s2[s2.length-1].length()-4);
         Layer inLayer1 = new Layer("", in1);
         Layer inLayer2 = new Layer("", in2);
         Layer outLayer;
@@ -30,49 +35,61 @@ public class Project {
 
         switch (operation){
             case "Maximum" -> {
-                outLayer = inLayer1.localMax(inLayer2, "");
+                outLayer = inLayer1.localMax(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nLocal maximum.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal maximum.\n\nOutput:\n" + out);
             }
             case "Minimum" -> {
-                outLayer = inLayer1.localMin(inLayer2, "");
+                outLayer = inLayer1.localMin(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nLocal minimum.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal minimum.\n\nOutput:\n" + out);
             }
             case "Sum" -> {
-                outLayer = inLayer1.localSum(inLayer2, "");
+                outLayer = inLayer1.localSum(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nLocal sum.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal sum.\n\nOutput:\n" + out);
             }
             case "Mean" -> {
-                outLayer = inLayer1.localMean(inLayer2, "");
+                outLayer = inLayer1.localMean(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nLocal mean.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal mean.\n\nOutput:\n " + out);
                 outLayer.save(out);
             }
             case "Variety" -> {
-                outLayer = inLayer1.localVariety(inLayer2, "");
+                outLayer = inLayer1.localVariety(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nLocal variety.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal variety.\n\nOutput:\n: " + out);
             }
         }
     }
 
     public void focalOperation(String in, String out, String sRad, String nbType, String operation){
+        String[] s1 = in.split("\\\\");
+        String name1 = s1[s1.length-1].substring(0, s1[s1.length-1].length()-4);
         Layer inLayer = new Layer("", in);
         Layer outLayer;
         MapPanel inMap, outMap;
@@ -92,52 +109,66 @@ public class Project {
 
         switch (operation){
             case "Maximum" -> {
-                outLayer = inLayer.focalMaximum(rad, isSquare, "");
+                outLayer = inLayer.focalMaximum(rad, isSquare, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText("Null");
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage(in + "\n\nFocal maximum.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal maximum.\n\nOutput:\n" + out);
             }
             case "Minimum" -> {
-                outLayer = inLayer.focalMinimum(rad, isSquare, "");
+                outLayer = inLayer.focalMinimum(rad, isSquare, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText("Null");
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage(in + "\n\nFocal minimum.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal minimum.\n\nOutput:\n" + out);
             }
             case "Sum" -> {
-                outLayer = inLayer.focalSum(rad, isSquare, "");
+                outLayer = inLayer.focalSum(rad, isSquare, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText("Null");
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage(in + "\n\nFocal sum.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal sum.\n\nOutput:\n" + out);
             }
             case "Mean" -> {
-                outLayer = inLayer.focalMean(rad, isSquare, "");
+                outLayer = inLayer.focalMean(rad, isSquare, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText("Null");
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage(in + "\n\nFocal mean.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal mean.\n\nOutput:\n" + out);
             }
             case "Variety" -> {
-                outLayer = inLayer.focalVariety(rad, isSquare, "");
+                outLayer = inLayer.focalVariety(rad, isSquare, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText("Null");
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage(in + "\n\nFocal variety.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal variety.\n\nOutput:\n " + out);
             }
         }
     }
 
     public void zonalOperation(String in1, String in2, String out, String operation){
+        String[] s1 = in1.split("\\\\");
+        String name1 = s1[s1.length-1].substring(0, s1[s1.length-1].length()-4);
+        String[] s2 = in2.split("\\\\");
+        String name2 = s2[s2.length-1].substring(0, s2[s2.length-1].length()-4);
         Layer inLayer1 = new Layer("", in1);
         Layer inLayer2 = new Layer("", in2);
-        Layer outLayer;
+        Layer outLayer = null;
         MapPanel inMap1, inMap2, outMap;
         int frame = Math.min(mainFrame.getMapPanel().getWidth(), mainFrame.getMapPanel().getHeight());
         int map = (int) Math.max(inLayer1.nRows, inLayer1.nCols);
@@ -147,44 +178,54 @@ public class Project {
 
         switch (operation){
             case "Maximum" -> {
-                outLayer = inLayer1.zonalMaximum(inLayer2, "");
+                outLayer = inLayer1.zonalMaximum(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
-                mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
+                mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nZonal maximum.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal maximum.\n\nOutput:\n" + out);
             }
             case "Minimum" -> {
-                outLayer = inLayer1.zonalMinimum(inLayer2, "");
+                outLayer = inLayer1.zonalMinimum(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nZonal minimum.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal minimum.\n\nOutput:\n" + out);
             }
             case "Sum" -> {
-                outLayer = inLayer1.zonalSum(inLayer2, "");
+                outLayer = inLayer1.zonalSum(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
-                mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale);
+                mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nZonal sum.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal sum.\n\nOutput:\n" + out);
             }
             case "Mean" -> {
-                outLayer = inLayer1.zonalMean(inLayer2, "");
+                outLayer = inLayer1.zonalMean(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nZonal mean.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal mean.\n\nOutput:\n" + out);
             }
             case "Variety" -> {
-                outLayer = inLayer1.zonalVariety(inLayer2, "");
+                outLayer = inLayer1.zonalVariety(inLayer2, "", MainFrame.progressBar);
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                MainFrame.toggleBox1.setText(name1);
+                MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
-                mainFrame.showMessage(in1+"\n"+in2 + "\n\nZonal variety.\n\nOutput file created at path: " + out + ".");
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal variety.\n\nOutput:\n" + out);
             }
         }
     }

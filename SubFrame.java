@@ -7,7 +7,7 @@ import java.util.Objects;
 
 
 public class SubFrame extends MainFrame{
-    static Icon icon = new ImageIcon("./data/file_folder.png"); // file icon
+    static Icon fileIcon = new ImageIcon("./icons/file_folder.png"); // file icon
 
     public static String openDir(){
         JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
@@ -18,24 +18,24 @@ public class SubFrame extends MainFrame{
         if (selectedFile != null)
             return selectedFile.getAbsolutePath();
         else
-            return "Please choose a file!";
+            return "";
     }
 
     static class LocalSubFrame{
         // Input Boxes
         JLabel inputLabel1 = new JLabel("Input 1");
         JPanel inputPanel1 = new JPanel();
-        JButton inputButton1 = new JButton(icon);
+        JButton inputButton1 = new JButton(fileIcon);
         JTextField inputField1 = new JTextField(40);
         JLabel inputLabel2 = new JLabel("Input 2");
         JPanel inputPanel2 = new JPanel();
-        JButton inputButton2 = new JButton(icon);
+        JButton inputButton2 = new JButton(fileIcon);
         JTextField inputField2 = new JTextField(40);
 
         // Output Box
         JLabel outputLabel = new JLabel("Output");
         JPanel outputPanel = new JPanel();
-        JButton outputButton = new JButton(icon);
+        JButton outputButton = new JButton(fileIcon);
         JTextField outputField = new JTextField(40);
 
 //        // Map scale
@@ -60,12 +60,7 @@ public class SubFrame extends MainFrame{
                 {
                     JFrame frame = new JFrame("Local Operations");
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    try
-                    {
-                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    frame.setLocationRelativeTo(null);
                     JPanel panel = new JPanel();
                     panel.setLayout(new GridLayout(5,1));
                     panel.setOpaque(true);
@@ -108,15 +103,7 @@ public class SubFrame extends MainFrame{
                             outputField.setText(text);
                         }
                     });
-//                outputPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
                     panel.add(outputPanel);
-
-//                    // Scale box
-//                    scPanel.setLayout(new FlowLayout());
-//                    scPanel.add(scLabel);
-//                    scPanel.add(scField);
-//                    scPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-//                    panel.add(scPanel);
 
                     // Operation drop down list
                     opPanel.setLayout(new FlowLayout());
@@ -145,14 +132,24 @@ public class SubFrame extends MainFrame{
                             boolean error1 = Objects.equals(inFile1, "") ||
                                     Objects.equals(inFile2, "") ||
                                     Objects.equals(outFile, "");
-
                             boolean error2 = !file1.exists() || !file2.exists();
+                            int error3 = 0;
+                            if (!error2){
+                                // if no error2, check dimension
+                                Layer layer1 = new Layer("", inFile1);
+                                Layer layer2 = new Layer("", inFile2);
+                                boolean err3 = !((layer1.nRows==layer2.nRows) && (layer1.nCols==layer2.nCols) && (layer1.resolution==layer2.resolution));
+                                if(!err3)  // no error2 and error3
+                                    error3 = 1;
+                            }
 
                             if (error1)
                                 JOptionPane.showMessageDialog(null, "Missing parameter(s)!", "Error", JOptionPane.ERROR_MESSAGE);
                             if (error2)
                                 JOptionPane.showMessageDialog(null, "Input file(s) does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (!error1 && !error2)
+                            if (error3 == 0)
+                                JOptionPane.showMessageDialog(null, "Inputs do not have the same dimension!", "Error", JOptionPane.ERROR_MESSAGE);
+                            if (!error1 && !error2 && error3==1)
                                 project.localOperation(inFile1, inFile2, outFile, op);
                         }
                     });
@@ -171,21 +168,16 @@ public class SubFrame extends MainFrame{
 
     static class FocalSubFrame{
         // Input Box
-        JLabel inputLabel = new JLabel("Input   ");
+        JLabel inputLabel = new JLabel("Input    ");
         JPanel inputPanel = new JPanel();
-        JButton inputButton = new JButton(icon);
+        JButton inputButton = new JButton(fileIcon);
         JTextField inputField = new JTextField(40);
 
         // Output Box
-        JLabel outputLabel = new JLabel("Output");
+        JLabel outputLabel = new JLabel("Output ");
         JPanel outputPanel = new JPanel();
-        JButton outputButton = new JButton(icon);
+        JButton outputButton = new JButton(fileIcon);
         JTextField outputField = new JTextField(40);
-
-//        // Map scale
-//        JLabel scLabel = new JLabel("Map Scale Factor");
-//        JPanel scPanel = new JPanel();
-//        JTextField scField = new JTextField(5);
 
         // Neighbor radius
         JLabel nbLabel1 = new JLabel("Neighborhood Radius");
@@ -212,12 +204,6 @@ public class SubFrame extends MainFrame{
                 {
                     JFrame frame = new JFrame("Focal Operations");
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    try
-                    {
-                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                     JPanel panel = new JPanel();
                     panel.setLayout(new GridLayout(5,1));
                     panel.setOpaque(true);
@@ -249,15 +235,7 @@ public class SubFrame extends MainFrame{
                             outputField.setText(text);
                         }
                     });
-//                outputPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
                     panel.add(outputPanel);
-
-//                    // Scale box
-//                    scPanel.setLayout(new FlowLayout());
-//                    scPanel.add(scLabel);
-//                    scPanel.add(scField);
-//                    scPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-//                    panel.add(scPanel);
 
                     // Neighborhood box
                     nbPanel.setLayout(new FlowLayout());
@@ -294,14 +272,16 @@ public class SubFrame extends MainFrame{
 
                             boolean error1 = Objects.equals(inFile, "") ||
                                     Objects.equals(outFile, "");
-
                             boolean error2 = !file1.exists();
+                            boolean error3 = !sRad.matches("\\d+");
 
                             if (error1)
                                 JOptionPane.showMessageDialog(null, "Missing parameter(s)!", "Error", JOptionPane.ERROR_MESSAGE);
                             if (error2)
                                 JOptionPane.showMessageDialog(null, "Input file(s) does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (!error1 && !error2)
+                            if (error3)
+                                JOptionPane.showMessageDialog(null, "Radius must be an integer!", "Error", JOptionPane.ERROR_MESSAGE);
+                            if (!error1 && !error2 && !error3)
                                 project.focalOperation(inFile, outFile, sRad, type, op);
                         }
                     });
@@ -319,25 +299,20 @@ public class SubFrame extends MainFrame{
 
     static class ZonalSubFrame{
         // Input Boxes
-        JLabel inputLabel1 = new JLabel("Value ");
+        JLabel inputLabel1 = new JLabel("Value  ");
         JPanel inputPanel1 = new JPanel();
-        JButton inputButton1 = new JButton(icon);
+        JButton inputButton1 = new JButton(fileIcon);
         JTextField inputField1 = new JTextField(40);
-        JLabel inputLabel2 = new JLabel("Zone  ");
+        JLabel inputLabel2 = new JLabel("Zone   ");
         JPanel inputPanel2 = new JPanel();
-        JButton inputButton2 = new JButton(icon);
+        JButton inputButton2 = new JButton(fileIcon);
         JTextField inputField2 = new JTextField(40);
 
         // Output Box
         JLabel outputLabel = new JLabel("Output");
         JPanel outputPanel = new JPanel();
-        JButton outputButton = new JButton(icon);
+        JButton outputButton = new JButton(fileIcon);
         JTextField outputField = new JTextField(40);
-
-//        // Map scale
-//        JLabel scLabel = new JLabel("Map Scale Factor");
-//        JPanel scPanel = new JPanel();
-//        JTextField scField = new JTextField(5);
 
         // Operation drop down
         JLabel opLabel = new JLabel("Operation Type");
@@ -356,12 +331,6 @@ public class SubFrame extends MainFrame{
                 {
                     JFrame frame = new JFrame("Zonal Operations");
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    try
-                    {
-                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                     JPanel panel = new JPanel();
                     panel.setLayout(new GridLayout(5,1));
                     panel.setOpaque(true);
@@ -404,15 +373,7 @@ public class SubFrame extends MainFrame{
                             outputField.setText(text);
                         }
                     });
-//                outputPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
                     panel.add(outputPanel);
-
-//                    // Scale box
-//                    scPanel.setLayout(new FlowLayout());
-//                    scPanel.add(scLabel);
-//                    scPanel.add(scField);
-//                    scPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-//                    panel.add(scPanel);
 
                     // Operation drop down list
                     opPanel.setLayout(new FlowLayout());
@@ -426,11 +387,10 @@ public class SubFrame extends MainFrame{
                     confirmButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            String inFile1 = inputField1.getText();
-                            String inFile2 = inputField2.getText();
-                            String outFile = outputField.getText();
-//                            String sScale = scField.getText();
-                            String op = opBox.getSelectedItem().toString();
+                            final String inFile1 = inputField1.getText();
+                            final String inFile2 = inputField2.getText();
+                            final String outFile = outputField.getText();
+                            final String op = opBox.getSelectedItem().toString();
 
                             toggleBox1.setSelected(true);
                             toggleBox2.setSelected(true);
@@ -442,15 +402,25 @@ public class SubFrame extends MainFrame{
                             boolean error1 = Objects.equals(inFile1, "") ||
                                     Objects.equals(inFile2, "") ||
                                     Objects.equals(outFile, "");
-
                             boolean error2 = !file1.exists() || !file2.exists();
+                            int error3 = 0;
+                            if (!error2){
+                                // if no error2, check dimension
+                                Layer layer1 = new Layer("", inFile1);
+                                Layer layer2 = new Layer("", inFile2);
+                                boolean err3 = !((layer1.nRows==layer2.nRows) && (layer1.nCols==layer2.nCols) && (layer1.resolution==layer2.resolution));
+                                if(!err3)  // no error2 and error3
+                                    error3 = 1;
+                            }
 
                             if (error1)
                                 JOptionPane.showMessageDialog(null, "Missing parameter(s)!", "Error", JOptionPane.ERROR_MESSAGE);
                             if (error2)
                                 JOptionPane.showMessageDialog(null, "Input file(s) does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (!error1 && !error2)
-                                project.zonalOperation(inFile1, inFile2, outFile, op);
+                            if (error3 == 0)
+                                JOptionPane.showMessageDialog(null, "Inputs do not have the same dimension!", "Error", JOptionPane.ERROR_MESSAGE);
+                            if (!error1 && !error2 && error3==1)
+                                project.localOperation(inFile1, inFile2, outFile, op);
                         }
                     });
 
