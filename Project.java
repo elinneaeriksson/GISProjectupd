@@ -62,7 +62,7 @@ public class Project {
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal sum.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal sum\n\nOutput:\n" + out);
             }
             case "Mean" -> {
                 outLayer = inLayer1.localMean(inLayer2, "", MainFrame.progressBar);
@@ -71,7 +71,7 @@ public class Project {
                 MainFrame.toggleBox2.setText(name2);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal mean.\n\nOutput:\n " + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal mean\n\nOutput:\n " + out);
                 outLayer.save(out);
             }
             case "Variety" -> {
@@ -82,7 +82,7 @@ public class Project {
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal variety.\n\nOutput:\n: " + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal variety\n\nOutput:\n: " + out);
             }
         }
     }
@@ -116,7 +116,7 @@ public class Project {
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal maximum.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal maximum\n\nOutput:\n" + out);
             }
             case "Minimum" -> {
                 outLayer = inLayer.focalMinimum(rad, isSquare, "", MainFrame.progressBar);
@@ -126,7 +126,7 @@ public class Project {
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal minimum.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal minimum\n\nOutput:\n" + out);
             }
             case "Sum" -> {
                 outLayer = inLayer.focalSum(rad, isSquare, "", MainFrame.progressBar);
@@ -136,7 +136,7 @@ public class Project {
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal sum.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal sum\n\nOutput:\n" + out);
             }
             case "Mean" -> {
                 outLayer = inLayer.focalMean(rad, isSquare, "", MainFrame.progressBar);
@@ -146,7 +146,7 @@ public class Project {
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal mean.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal mean\n\nOutput:\n" + out);
             }
             case "Variety" -> {
                 outLayer = inLayer.focalVariety(rad, isSquare, "", MainFrame.progressBar);
@@ -156,7 +156,7 @@ public class Project {
                 mainFrame.setMaps(inMap, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal variety.\n\nOutput:\n " + out);
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal variety\n\nOutput:\n " + out);
             }
         }
     }
@@ -185,7 +185,7 @@ public class Project {
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal maximum.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal maximum\n\nOutput:\n" + out);
             }
             case "Minimum" -> {
                 outLayer = inLayer1.zonalMinimum(inLayer2, "", MainFrame.progressBar);
@@ -195,7 +195,7 @@ public class Project {
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal minimum.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal minimum\n\nOutput:\n" + out);
             }
             case "Sum" -> {
                 outLayer = inLayer1.zonalSum(inLayer2, "", MainFrame.progressBar);
@@ -205,7 +205,7 @@ public class Project {
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal sum.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal sum\n\nOutput:\n" + out);
             }
             case "Mean" -> {
                 outLayer = inLayer1.zonalMean(inLayer2, "", MainFrame.progressBar);
@@ -215,7 +215,7 @@ public class Project {
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal mean.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal mean\n\nOutput:\n" + out);
             }
             case "Variety" -> {
                 outLayer = inLayer1.zonalVariety(inLayer2, "", MainFrame.progressBar);
@@ -225,7 +225,7 @@ public class Project {
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal variety.\n\nOutput:\n" + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal variety\n\nOutput:\n" + out);
             }
         }
     }

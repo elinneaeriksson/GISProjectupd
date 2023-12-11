@@ -64,7 +64,6 @@ public class MainFrame extends JFrame{
         c.gridy = 4;
         gridBag.setConstraints(toggleBox2, c);
         buttonPanel.add(toggleBox2);
-
         c.gridx = 0;
         c.gridy = 5;
         gridBag.setConstraints(toggleBox1, c);
@@ -107,7 +106,7 @@ public class MainFrame extends JFrame{
         add(buttonPanel);
 
         // Map panel
-        mapPanel.setBackground(Color.LIGHT_GRAY);
+        mapPanel.setBackground(Color.white);
         mapPanel.setPreferredSize(new Dimension(800, mapPanel.getPreferredSize().height));
         add(mapPanel);
 
@@ -146,7 +145,7 @@ public class MainFrame extends JFrame{
     }
 
     public void addMap(int rows, int cols, int scale){
-        colorBox.setSelectedItem("Black and White");
+        colorBox.setSelectedIndex(0);
         layeredPane.removeAll();
 
         int width = cols * scale;
@@ -167,12 +166,14 @@ public class MainFrame extends JFrame{
         gbc.gridy = 0;
         mapPanel.add(layeredPane, gbc);
 
+        outMap.getPixelValue();
+
         revalidate();
         repaint();
     }
 
     public void addMap(int rows, int cols, int scale, int inLayers){
-        colorBox.setSelectedItem("Black and White");
+        colorBox.setSelectedIndex(0);
         layeredPane.removeAll();
 
         int width = cols * scale;
@@ -196,6 +197,8 @@ public class MainFrame extends JFrame{
         gbc.gridy = 0;
         mapPanel.add(layeredPane, gbc);
 
+        outMap.getPixelValue();
+
         revalidate();
         repaint();
     }
@@ -206,18 +209,26 @@ public class MainFrame extends JFrame{
 
         // Set bounds before adding to pane
         inMap1.setBounds(0, 0, width, height);
-        if (!(inMap2 == null))
+        if (inMap2 != null)
             inMap2.setBounds(0, 0, width, height);
         outMap.setBounds(0, 0, width, height);
 
         layeredPane.removeAll();
         layeredPane.add(inMap1, JLayeredPane.DEFAULT_LAYER);
-        if (!(inMap2 == null)){
+        if (inMap2 != null){
             layeredPane.add(inMap2, JLayeredPane.PALETTE_LAYER);
             layeredPane.add(outMap, JLayeredPane.MODAL_LAYER);
+            toggleBox1.setSelected(true);
+            toggleBox2.setSelected(true);
+            toggleBox3.setSelected(true);
         }
-        else
+        else{
             layeredPane.add(outMap, JLayeredPane.PALETTE_LAYER);
+            toggleBox1.setSelected(true);
+            toggleBox3.setSelected(true);
+        }
+
+        outMap.getPixelValue();
 
         // Update the layout
         layeredPane.revalidate();
@@ -255,23 +266,25 @@ public class MainFrame extends JFrame{
                 }
             });
 
-            colorBox.addActionListener(e -> {
-                if(inMap1==null)
-                    JOptionPane.showMessageDialog(null, "Map Panel is empty!", "Error", JOptionPane.ERROR_MESSAGE);
-                else{
-                    String color = colorBox.getSelectedItem().toString();
-                    inMap1 = inMap1.changeMapColor(inMap1, color, inMap1.scale);
-                    if (!(inMap2 == null))
-                        inMap2 = inMap2.changeMapColor(inMap2, color, inMap2.scale);
-                    outMap = outMap.changeMapColor(outMap, color, outMap.scale);
-                    renewMap(inMap1, inMap2, outMap);
+            colorBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (colorBox.hasFocus()){
+                        String color = colorBox.getSelectedItem().toString();
+
+                        inMap1 = inMap1.changeMapColor(inMap1, color, inMap1.scale);
+                        outMap = outMap.changeMapColor(outMap, color, outMap.scale);
+                        if (inMap2 != null)
+                            inMap2 = inMap2.changeMapColor(inMap2, color, inMap2.scale);
+
+                        renewMap(inMap1, inMap2, outMap);
+                    }
+
                 }
             });
 
+            revalidate();
+            repaint();
         });
-
-        revalidate();
-        repaint();
-        //pack();
     }
 }

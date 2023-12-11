@@ -38,11 +38,6 @@ public class SubFrame extends MainFrame{
         JButton outputButton = new JButton(fileIcon);
         JTextField outputField = new JTextField(40);
 
-//        // Map scale
-//        JLabel scLabel = new JLabel("Map Scale Factor");
-//        JPanel scPanel = new JPanel();
-//        JTextField scField = new JTextField(5);
-
         // Operation drop down
         JLabel opLabel = new JLabel("Operation Type");
         JPanel opPanel = new JPanel();
