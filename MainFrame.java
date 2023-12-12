@@ -17,7 +17,7 @@ public class MainFrame extends JFrame{
     public static final JProgressBar progressBar = new JProgressBar(0, 100);
 
     public MainFrame(){
-        setTitle("App");
+        setTitle("Raster");
         setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 
         JButton localButton = new JButton("Local Operations");
@@ -269,7 +269,7 @@ public class MainFrame extends JFrame{
             colorBox.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (colorBox.hasFocus()){
+                    if (colorBox.hasFocus()){  // if mouse made the selection
                         String color = colorBox.getSelectedItem().toString();
 
                         inMap1 = inMap1.changeMapColor(inMap1, color, inMap1.scale);
