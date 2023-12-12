@@ -143,7 +143,7 @@ public class Layer {
                 if (this.getMax() == this.getMin()) {
                     raster.setPixel(j,i,color);
                 } else {
-                    color[0] = (int)(255.0 - (this.values[i * this.nCols + j]- this.getMin()) / (this.getMax() - this.getMin()) * 255.0);
+                    color[0] = (int)((this.values[i * this.nCols + j]- this.getMin()) / (this.getMax() - this.getMin()) * 255.0);
                     color[1] = color[0];
                     color[2] = color[0];
                     raster.setPixel(j,i,color);
@@ -206,7 +206,7 @@ public class Layer {
                     float hue = (float)((this.values[i * this.nCols + j] - this.getMin()) / (float)(this.getMax() - this.getMin())*0.9); //0.9 avoids making both low and high values red
                     int sat = 1;
                     int bri = 1;
-                    int rgb = Color.HSBtoRGB(hue,sat,bri);
+                    int rgb = Color.HSBtoRGB(0.66f - hue,sat,bri);
                     color[0] = (rgb >> 16) &0xFF;
                     color[1] = (rgb >> 8) &0xFF;
                     color[2] = rgb &0xFF;
