@@ -140,9 +140,9 @@ public class SubFrame extends MainFrame{
 
                             if (error1)
                                 JOptionPane.showMessageDialog(null, "Missing parameter(s)!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (error2)
+                            if (!error1 && error2)
                                 JOptionPane.showMessageDialog(null, "Input file(s) does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (error3 == 0)
+                            if (!error1 && error3 == 0)
                                 JOptionPane.showMessageDialog(null, "Inputs do not have the same dimension!", "Error", JOptionPane.ERROR_MESSAGE);
                             if (!error1 && !error2 && error3==1)
                                 project.localOperation(inFile1, inFile2, outFile, op);
@@ -410,9 +410,9 @@ public class SubFrame extends MainFrame{
 
                             if (error1)
                                 JOptionPane.showMessageDialog(null, "Missing parameter(s)!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (error2)
+                            if (!error1 && error2)
                                 JOptionPane.showMessageDialog(null, "Input file(s) does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (error3 == 0)
+                            if (!error1 && error3 == 0)
                                 JOptionPane.showMessageDialog(null, "Inputs do not have the same dimension!", "Error", JOptionPane.ERROR_MESSAGE);
                             if (!error1 && !error2 && error3==1)
                                 project.localOperation(inFile1, inFile2, outFile, op);
