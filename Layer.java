@@ -285,9 +285,9 @@ public class Layer {
         for (int i = 0; i < (nRows * nCols); i++){
             final int progress = (int) ((i / (double) totalSteps * 100 + 1));
 
-            if (outLayer.values[i] == nullValue){
-                continue;
-            }
+            if (this.values[i] == nullValue || inLayer.values[i] == nullValue) {
+	            outLayer.values[i] = nullValue;
+		}
             else{
                 outLayer.values[i] = values[i] + inLayer.values[i];
             }
