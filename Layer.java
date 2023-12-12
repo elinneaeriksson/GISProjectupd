@@ -797,6 +797,153 @@ public class Layer {
         }
         return outLayer;
     }
+    public Layer zonalMajority(Layer inLayer, String outLayerName, JProgressBar progressBar) {
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[this.nRows*this.nCols];
+
+        HashMap<Double, Double> zone_maj = new HashMap<>();
+        HashMap<Double, ArrayList<Double>> freq = new HashMap<>();
+
+        int totalSteps = nRows * nCols;
+        // Assign list of cell values for each zone
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            int progress = (int) ((i / (double) totalSteps * 100));
+            if(i == totalSteps-1)
+                progress = 100;
+
+            double zone = inLayer.values[i];
+            if (zone==nullValue) {
+                ArrayList<Double> val = new ArrayList<>();
+                val.add(nullValue);
+                freq.put(zone, val);
+            }
+            else if(!freq.containsKey(zone)) {
+                ArrayList<Double> val = new ArrayList<>();
+                val.add(this.values[i]);
+                freq.put(zone, val);
+            }
+            else {
+                ArrayList<Double> val = freq.get(zone);
+                val.add(this.values[i]);
+                freq.put(zone, val);
+            }
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
+        }
+
+        // Count value frequency and most common value
+        for (Double key : freq.keySet()) {
+            ArrayList <Double> val = freq.get(key);
+            HashMap <Double,Integer> valFreq = new HashMap<>();
+            for (Double i : val) {
+                if (!valFreq.containsKey(i)) {
+                    valFreq.put(i, 1);
+                }
+                else {
+                    Integer value = valFreq.get(i) + 1;
+                    valFreq.put(i,value);
+                }
+            }
+            System.out.println(valFreq);
+            int max = 0;
+            Double maxKey = 0.0;
+            for (Double i : valFreq.keySet()) {
+                if (valFreq.get(i)>max) {
+                    max = valFreq.get(i);
+                    maxKey = i;
+                }
+                zone_maj.put(key, maxKey);
+            }
+        }
+
+        // Print in outLayer
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            if (this.values[i] == nullValue) {
+                outLayer.values[i] = nullValue;
+            }
+            else {
+                outLayer.values[i] = zone_maj.get(inLayer.values[i]);
+            }
+
+        }
+
+        return outLayer;
+    }
+
+    public Layer zonalMinority(Layer inLayer, String outLayerName, JProgressBar progressBar) {
+        Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+        outLayer.values = new double[this.nRows*this.nCols];
+
+        HashMap<Double, Double> zone_min = new HashMap<>();
+        HashMap<Double, ArrayList<Double>> freq = new HashMap<>();
+
+        int totalSteps = nRows * nCols;
+        // Assign list of cell values for each zone
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            int progress = (int) ((i / (double) totalSteps * 100));
+            if(i == totalSteps-1)
+                progress = 100;
+
+            double zone = inLayer.values[i];
+            if (zone==nullValue) {
+                ArrayList<Double> val = new ArrayList<>();
+                val.add(nullValue);
+                freq.put(zone, val);
+            }
+            else if(!freq.containsKey(zone)) {
+                ArrayList<Double> val = new ArrayList<>();
+                val.add(this.values[i]);
+                freq.put(zone, val);
+            }
+            else {
+                ArrayList<Double> val = freq.get(zone);
+                val.add(this.values[i]);
+                freq.put(zone, val);
+            }
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
+        }
+
+        // Count value frequency and least common value
+        for (Double key : freq.keySet()) {
+            ArrayList <Double> val = freq.get(key);
+            HashMap <Double,Double> valFreq = new HashMap<>();
+            for (Double i : val) {
+                if (!valFreq.containsKey(i)) {
+                    Double value = 1.0;
+                    valFreq.put(i, value);
+                }
+                else {
+                    Double value = valFreq.get(i) + 1;
+                    valFreq.put(i,value);
+                }
+            }
+            System.out.println(valFreq);
+            double min = Double.POSITIVE_INFINITY;
+            Double maxKey = 0.0;
+            for (Double i : valFreq.keySet()) {
+                if (valFreq.get(i)<min) {
+                    min = valFreq.get(i);
+                    maxKey = i;
+                }
+                zone_min.put(key, maxKey);
+            }
+        }
+
+        // Print in outLayer
+        for (int i = 0; i < this.nRows*this.nCols; i++) {
+            if (this.values[i] == nullValue) {
+                outLayer.values[i] = nullValue;
+            }
+            else {
+                outLayer.values[i] = zone_min.get(inLayer.values[i]);
+            }
+
+        }
+        return outLayer;
+    }
 
 
     private int[] getNeighborhood(int index, int radius, boolean isSquare) {
@@ -839,7 +986,7 @@ public class Layer {
         return neighborArray;
     }
 
-    private double getMax() {
+    public double getMax() {
         double max = Double.NEGATIVE_INFINITY;
 
         for(int i = 0; i < this.nRows; ++i) {
@@ -862,7 +1009,7 @@ public class Layer {
         return max;
     }
 
-    private double getMin() {
+    public double getMin() {
         double min = Double.POSITIVE_INFINITY;
 
         for(int i = 0; i < this.nRows; ++i) {

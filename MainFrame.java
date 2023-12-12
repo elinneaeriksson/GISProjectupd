@@ -2,18 +2,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
+import java.text.DecimalFormat;
 
 public class MainFrame extends JFrame{
     public static MapPanel inMap1, inMap2, outMap;
+
     private Project project;
+
     private final JPanel mapPanel = new JPanel();
+
     public static JCheckBox toggleBox1 = new JCheckBox("Layer 1");
     public static JCheckBox toggleBox2 = new JCheckBox("Layer 2");
     public static JCheckBox toggleBox3 = new JCheckBox("Result");
+
+    public static JTextArea minMax1 = new JTextArea();
+    public static JTextArea minMax2 = new JTextArea();
+    public static JTextArea minMax3 = new JTextArea();
+
     public JTextArea messageBox = new JTextArea("Message");
+
     private final JLayeredPane layeredPane = new JLayeredPane();
+
     HashMap<String, Icon> itemImageMap = new HashMap<>();
     private final JComboBox<String> colorBox = new JComboBox<>(new String[] { "Black and White", "Cool", "Heat", "Rainbow" });
+
     public static final JProgressBar progressBar = new JProgressBar(0, 100);
 
     public MainFrame(){
@@ -43,42 +55,46 @@ public class MainFrame extends JFrame{
         c.insets = new Insets(2, 2, 2, 2);  // Border pads
         c.fill = GridBagConstraints.HORIZONTAL;
         c.ipady = 60;
-        c.gridx = 0;
         c.gridy = 0;
         gridBag.setConstraints(localButton, c);
         buttonPanel.add(localButton);
-        c.gridx = 0;
         c.gridy = 1;
         gridBag.setConstraints(focalButton, c);
         buttonPanel.add(focalButton);
-        c.gridx = 0;
         c.gridy = 2;
         gridBag.setConstraints(zonalButton, c);
         buttonPanel.add(zonalButton);
 
-        c.gridx = 0;
+        c.ipady = 10;
         c.gridy = 3;
         gridBag.setConstraints(toggleBox3, c);
         buttonPanel.add(toggleBox3);
-        c.gridx = 0;
         c.gridy = 4;
+        gridBag.setConstraints(minMax3, c);
+        buttonPanel.add(minMax3);
+
+        c.gridy = 5;
         gridBag.setConstraints(toggleBox2, c);
         buttonPanel.add(toggleBox2);
-        c.gridx = 0;
-        c.gridy = 5;
+        c.gridy = 6;
+        gridBag.setConstraints(minMax2, c);
+        buttonPanel.add(minMax2);
+
+        c.gridy = 7;
         gridBag.setConstraints(toggleBox1, c);
         buttonPanel.add(toggleBox1);
+        c.gridy = 8;
+        gridBag.setConstraints(minMax1, c);
+        buttonPanel.add(minMax1);
 
         c.ipady = 10;
-        c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 9;
         JLabel cLabel = new JLabel("Change colors");
         gridBag.setConstraints(cLabel, c);
         buttonPanel.add(cLabel);
 
         c.ipady = 5;
-        c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = 10;
         gridBag.setConstraints(colorBox, c);
         buttonPanel.add(colorBox);
         itemImageMap.put("Black and White", new ImageIcon("./icons/bw.png"));
@@ -88,8 +104,7 @@ public class MainFrame extends JFrame{
         colorBox.setRenderer(new ImageComboBoxRenderer(itemImageMap));
 
         c.ipady = 150;
-        c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 11;
         JScrollPane scrollPane = new JScrollPane(messageBox);
         gridBag.setConstraints(scrollPane, c);
         messageBox.setLineWrap(true);
@@ -98,7 +113,7 @@ public class MainFrame extends JFrame{
 
         c.ipady = 5;
         c.gridx = 0;
-        c.gridy = 9;
+        c.gridy = 12;
         gridBag.setConstraints(progressBar, c);
         progressBar.setStringPainted(true);
         buttonPanel.add(progressBar);
@@ -156,6 +171,10 @@ public class MainFrame extends JFrame{
         layeredPane.add(outMap, JLayeredPane.PALETTE_LAYER);
         layeredPane.setPreferredSize(new Dimension(width, height));
 
+        DecimalFormat df=new DecimalFormat("0.00");
+        minMax1.setText("Min: " + df.format(inMap1.layer.getMin()) + "  Max: " + df.format(inMap1.layer.getMax()));
+        minMax3.setText("Min: " + df.format(outMap.layer.getMin()) + "  Max: " + df.format(outMap.layer.getMax()));
+
         inMap1.setVisible(true);
         outMap.setVisible(true);
 
@@ -165,8 +184,6 @@ public class MainFrame extends JFrame{
         gbc.gridx = 0;
         gbc.gridy = 0;
         mapPanel.add(layeredPane, gbc);
-
-        outMap.getPixelValue();
 
         revalidate();
         repaint();
@@ -186,6 +203,11 @@ public class MainFrame extends JFrame{
         layeredPane.add(outMap, JLayeredPane.MODAL_LAYER);
         layeredPane.setPreferredSize(new Dimension(width, height));
 
+        DecimalFormat df=new DecimalFormat("0.00");
+        minMax1.setText("Min: " + df.format(inMap1.layer.getMin()) + "  Max: " + df.format(inMap1.layer.getMax()));
+        minMax2.setText("Min: " + df.format(inMap2.layer.getMin()) + "  Max: " + df.format(inMap2.layer.getMax()));
+        minMax3.setText("Min: " + df.format(outMap.layer.getMin()) + "  Max: " + df.format(outMap.layer.getMax()));
+
         inMap1.setVisible(true);
         inMap2.setVisible(true);
         outMap.setVisible(true);
@@ -196,8 +218,6 @@ public class MainFrame extends JFrame{
         gbc.gridx = 0;
         gbc.gridy = 0;
         mapPanel.add(layeredPane, gbc);
-
-        outMap.getPixelValue();
 
         revalidate();
         repaint();
@@ -227,8 +247,6 @@ public class MainFrame extends JFrame{
             toggleBox1.setSelected(true);
             toggleBox3.setSelected(true);
         }
-
-        outMap.getPixelValue();
 
         // Update the layout
         layeredPane.revalidate();
