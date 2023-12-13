@@ -72,6 +72,7 @@ public class MainFrame extends JFrame{
         c.gridy = 4;
         gridBag.setConstraints(minMax3, c);
         buttonPanel.add(minMax3);
+        minMax3.setEditable(false);
 
         c.gridy = 5;
         gridBag.setConstraints(toggleBox2, c);
@@ -79,6 +80,7 @@ public class MainFrame extends JFrame{
         c.gridy = 6;
         gridBag.setConstraints(minMax2, c);
         buttonPanel.add(minMax2);
+        minMax2.setEditable(false);
 
         c.gridy = 7;
         gridBag.setConstraints(toggleBox1, c);
@@ -86,6 +88,7 @@ public class MainFrame extends JFrame{
         c.gridy = 8;
         gridBag.setConstraints(minMax1, c);
         buttonPanel.add(minMax1);
+        minMax1.setEditable(false);
 
         c.ipady = 10;
         c.gridy = 9;
@@ -109,6 +112,7 @@ public class MainFrame extends JFrame{
         gridBag.setConstraints(scrollPane, c);
         messageBox.setLineWrap(true);
         messageBox.setWrapStyleWord(true);
+        messageBox.setEditable(false);
         buttonPanel.add(scrollPane);
 
         c.ipady = 5;
@@ -148,11 +152,6 @@ public class MainFrame extends JFrame{
         this.project = project;
     }
 
-    public void setMaps(MapPanel inMap, MapPanel outMap){
-        inMap1 = inMap;
-        MainFrame.outMap = outMap;
-    }
-
     public void setMaps(MapPanel inMap1, MapPanel inMap2, MapPanel outMap){
         MainFrame.inMap1 = inMap1;
         MainFrame.inMap2 = inMap2;
@@ -171,9 +170,14 @@ public class MainFrame extends JFrame{
         layeredPane.add(outMap, JLayeredPane.PALETTE_LAYER);
         layeredPane.setPreferredSize(new Dimension(width, height));
 
-        DecimalFormat df=new DecimalFormat("0.00");
-        minMax1.setText("Min: " + df.format(inMap1.layer.getMin()) + "  Max: " + df.format(inMap1.layer.getMax()));
-        minMax3.setText("Min: " + df.format(outMap.layer.getMin()) + "  Max: " + df.format(outMap.layer.getMax()));
+        DecimalFormat df = new DecimalFormat("0.00");
+        minMax1.setText("Min: " + df.format(inMap1.layer.getMin()) + " Max: " + df.format(inMap1.layer.getMax()));
+        minMax2.setText("");
+        minMax3.setText("Min: " + df.format(outMap.layer.getMin()) + " Max: " + df.format(outMap.layer.getMax()));
+
+        toggleBox1.setSelected(true);
+        toggleBox2.setSelected(false);
+        toggleBox3.setSelected(true);
 
         inMap1.setVisible(true);
         outMap.setVisible(true);
@@ -184,6 +188,8 @@ public class MainFrame extends JFrame{
         gbc.gridx = 0;
         gbc.gridy = 0;
         mapPanel.add(layeredPane, gbc);
+
+        outMap.getPixelValue();
 
         revalidate();
         repaint();
@@ -204,9 +210,13 @@ public class MainFrame extends JFrame{
         layeredPane.setPreferredSize(new Dimension(width, height));
 
         DecimalFormat df=new DecimalFormat("0.00");
-        minMax1.setText("Min: " + df.format(inMap1.layer.getMin()) + "  Max: " + df.format(inMap1.layer.getMax()));
-        minMax2.setText("Min: " + df.format(inMap2.layer.getMin()) + "  Max: " + df.format(inMap2.layer.getMax()));
-        minMax3.setText("Min: " + df.format(outMap.layer.getMin()) + "  Max: " + df.format(outMap.layer.getMax()));
+        minMax1.setText("Min: " + df.format(inMap1.layer.getMin()) + " Max: " + df.format(inMap1.layer.getMax()));
+        minMax2.setText("Min: " + df.format(inMap2.layer.getMin()) + " Max: " + df.format(inMap2.layer.getMax()));
+        minMax3.setText("Min: " + df.format(outMap.layer.getMin()) + " Max: " + df.format(outMap.layer.getMax()));
+
+        toggleBox1.setSelected(true);
+        toggleBox2.setSelected(true);
+        toggleBox3.setSelected(true);
 
         inMap1.setVisible(true);
         inMap2.setVisible(true);
@@ -218,6 +228,8 @@ public class MainFrame extends JFrame{
         gbc.gridx = 0;
         gbc.gridy = 0;
         mapPanel.add(layeredPane, gbc);
+
+        outMap.getPixelValue();
 
         revalidate();
         repaint();
@@ -247,6 +259,8 @@ public class MainFrame extends JFrame{
             toggleBox1.setSelected(true);
             toggleBox3.setSelected(true);
         }
+
+        outMap.getPixelValue();
 
         // Update the layout
         layeredPane.revalidate();
@@ -290,14 +304,18 @@ public class MainFrame extends JFrame{
                     if (colorBox.hasFocus()){  // if mouse made the selection
                         String color = colorBox.getSelectedItem().toString();
 
-                        inMap1 = inMap1.changeMapColor(inMap1, color, inMap1.scale);
-                        outMap = outMap.changeMapColor(outMap, color, outMap.scale);
-                        if (inMap2 != null)
-                            inMap2 = inMap2.changeMapColor(inMap2, color, inMap2.scale);
+                        if(inMap1 == null){
+                            JOptionPane.showMessageDialog(null, "The map panel is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else{
+                            inMap1 = inMap1.changeMapColor(inMap1, color, inMap1.scale);
+                            outMap = outMap.changeMapColor(outMap, color, outMap.scale);
+                            if (inMap2 != null)
+                                inMap2 = inMap2.changeMapColor(inMap2, color, inMap2.scale);
 
-                        renewMap(inMap1, inMap2, outMap);
+                            renewMap(inMap1, inMap2, outMap);
+                        }
                     }
-
                 }
             });
 

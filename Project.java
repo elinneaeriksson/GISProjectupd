@@ -113,7 +113,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
-                mainFrame.setMaps(inMap, outMap);
+                mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
                 mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal maximum\n\nOutput:\n" + out);
@@ -123,7 +123,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
-                mainFrame.setMaps(inMap, outMap);
+                mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
                 mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal minimum\n\nOutput:\n" + out);
@@ -133,7 +133,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
-                mainFrame.setMaps(inMap, outMap);
+                mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
                 mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal sum\n\nOutput:\n" + out);
@@ -143,7 +143,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
-                mainFrame.setMaps(inMap, outMap);
+                mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
                 mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal mean\n\nOutput:\n" + out);
@@ -153,10 +153,10 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
-                mainFrame.setMaps(inMap, outMap);
+                mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal variety\n\nOutput:\n " + out);
+                mainFrame.showMessage("Input:\n"+in + "\n\nOperation:\nFocal variety\n\nOutput:\n" + out);
             }
         }
     }

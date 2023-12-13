@@ -117,10 +117,6 @@ public class SubFrame extends MainFrame{
                             String outFile = outputField.getText();
                             String op = opBox.getSelectedItem().toString();
 
-                            toggleBox1.setSelected(true);
-                            toggleBox2.setSelected(true);
-                            toggleBox3.setSelected(true);
-
                             File file1 = new File(inFile1);
                             File file2 = new File(inFile2);
 
@@ -134,6 +130,7 @@ public class SubFrame extends MainFrame{
                                 Layer layer1 = new Layer("", inFile1);
                                 Layer layer2 = new Layer("", inFile2);
                                 boolean err3 = !((layer1.nRows==layer2.nRows) && (layer1.nCols==layer2.nCols) && (layer1.resolution==layer2.resolution));
+
                                 if(!err3)  // no error2 and error3
                                     error3 = 1;
                             }
@@ -142,10 +139,12 @@ public class SubFrame extends MainFrame{
                                 JOptionPane.showMessageDialog(null, "Missing parameter(s)!", "Error", JOptionPane.ERROR_MESSAGE);
                             if (!error1 && error2)
                                 JOptionPane.showMessageDialog(null, "Input file(s) does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (!error1 && error3 == 0)
+                            if (!error1 && !error2 && error3 == 0)
                                 JOptionPane.showMessageDialog(null, "Inputs do not have the same dimension!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (!error1 && !error2 && error3==1)
+                            if (!error1 && !error2 && error3==1){
+                                frame.dispose();
                                 project.localOperation(inFile1, inFile2, outFile, op);
+                            }
                         }
                     });
 
@@ -260,21 +259,19 @@ public class SubFrame extends MainFrame{
                             String type = typeBox.getSelectedItem().toString();
                             String op = opBox.getSelectedItem().toString();
 
-                            toggleBox1.setSelected(true);
-                            toggleBox3.setSelected(true);
-
                             File file1 = new File(inFile);
 
                             boolean error1 = Objects.equals(inFile, "") ||
-                                    Objects.equals(outFile, "");
+                                    Objects.equals(outFile, "") ||
+                                    Objects.equals(sRad, "");
                             boolean error2 = !file1.exists();
                             boolean error3 = !sRad.matches("\\d+");
 
                             if (error1)
                                 JOptionPane.showMessageDialog(null, "Missing parameter(s)!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (error2)
+                            if (!error1 && error2)
                                 JOptionPane.showMessageDialog(null, "Input file(s) does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (error3)
+                            if (!error1 && error3)
                                 JOptionPane.showMessageDialog(null, "Radius must be an integer!", "Error", JOptionPane.ERROR_MESSAGE);
                             if (!error1 && !error2 && !error3)
                                 project.focalOperation(inFile, outFile, sRad, type, op);
@@ -387,10 +384,6 @@ public class SubFrame extends MainFrame{
                             final String outFile = outputField.getText();
                             final String op = opBox.getSelectedItem().toString();
 
-                            toggleBox1.setSelected(true);
-                            toggleBox2.setSelected(true);
-                            toggleBox3.setSelected(true);
-
                             File file1 = new File(inFile1);
                             File file2 = new File(inFile2);
 
@@ -412,10 +405,12 @@ public class SubFrame extends MainFrame{
                                 JOptionPane.showMessageDialog(null, "Missing parameter(s)!", "Error", JOptionPane.ERROR_MESSAGE);
                             if (!error1 && error2)
                                 JOptionPane.showMessageDialog(null, "Input file(s) does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (!error1 && error3 == 0)
+                            if (!error1  && !error2 && error3 == 0)
                                 JOptionPane.showMessageDialog(null, "Inputs do not have the same dimension!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (!error1 && !error2 && error3==1)
-                                project.localOperation(inFile1, inFile2, outFile, op);
+                            if (!error1 && !error2 && error3==1){
+                                frame.dispose();
+                                project.zonalOperation(inFile1, inFile2, outFile, op);
+                            }
                         }
                     });
 
@@ -430,6 +425,5 @@ public class SubFrame extends MainFrame{
             });
         }
     }
-
 }
 

@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.text.DecimalFormat;
 
 public class MapPanel extends JPanel {
     public BufferedImage image;
@@ -53,12 +54,12 @@ public class MapPanel extends JPanel {
 
                 if (x >= 0 && x < layer.nCols * scale && y >= 0 && y < layer.nRows * scale) {
                     double value = layer.values[row * layer.nCols + col];
-                    JOptionPane.showMessageDialog(null, "Pixel value at (" + row + ", " + col + "): " + value,
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    JOptionPane.showMessageDialog(null, "Pixel value at (" + row + ", " + col + "): " + df.format(value),
                             "Pixel Value", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
-
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
