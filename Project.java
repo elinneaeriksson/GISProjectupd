@@ -77,7 +77,7 @@ public class Project {
                 MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal mean\n\nOutput:\n " + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal mean\n\nOutput:\n" + out);
                 outLayer.save(out);
             }
             case "Variety" -> {
@@ -89,7 +89,7 @@ public class Project {
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
-                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal variety\n\nOutput:\n: " + out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal variety\n\nOutput:\n" + out);
             }
         }
     }

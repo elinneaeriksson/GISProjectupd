@@ -39,13 +39,13 @@ public class SubFrame extends MainFrame{
         JTextField outputField = new JTextField(40);
 
         // Operation drop down
-        JLabel opLabel = new JLabel("Operation Type");
+        JLabel opLabel = new JLabel("Operation");
         JPanel opPanel = new JPanel();
         String[] choices = { "Sum", "Mean", "Maximum", "Minimum", "Variety" };
         JComboBox<String> opBox = new JComboBox<String>(choices);
 
         // Confirm button
-        JButton confirmButton = new JButton("Confirm");
+        JButton confirmButton = new JButton("Run");
 
         public LocalSubFrame(Project project){
             EventQueue.invokeLater(new Runnable()
@@ -175,20 +175,20 @@ public class SubFrame extends MainFrame{
 
         // Neighbor radius
         JLabel nbLabel1 = new JLabel("Neighborhood Radius");
-        JLabel nbLabel2 = new JLabel("Neighborhood Type");
+        JLabel nbLabel2 = new JLabel("Neighborhood Shape");
         JPanel nbPanel = new JPanel();
         JTextField nbField = new JTextField(5);
         String[] types = { "Square", "Circle" };
         JComboBox<String> typeBox = new JComboBox<String>(types);
 
         // Operation drop down
-        JLabel opLabel = new JLabel("Operation Type");
+        JLabel opLabel = new JLabel("Operation");
         JPanel opPanel = new JPanel();
         String[] choices = { "Sum", "Mean", "Maximum", "Minimum", "Variety" };
         JComboBox<String> opBox = new JComboBox<String>(choices);
 
         // Confirm button
-        JButton confirmButton = new JButton("Confirm");
+        JButton confirmButton = new JButton("Run");
 
         public FocalSubFrame(Project project){
             EventQueue.invokeLater(new Runnable()
@@ -309,13 +309,13 @@ public class SubFrame extends MainFrame{
         JTextField outputField = new JTextField(40);
 
         // Operation drop down
-        JLabel opLabel = new JLabel("Operation Type");
+        JLabel opLabel = new JLabel("Operation");
         JPanel opPanel = new JPanel();
         String[] choices = { "Sum", "Mean", "Maximum", "Minimum", "Variety", "Majority", "Minority"};
         JComboBox<String> opBox = new JComboBox<String>(choices);
 
         // Confirm button
-        JButton confirmButton = new JButton("Confirm");
+        JButton confirmButton = new JButton("Run");
 
         public ZonalSubFrame(Project project){
             EventQueue.invokeLater(new Runnable()
