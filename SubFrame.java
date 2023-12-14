@@ -273,8 +273,10 @@ public class SubFrame extends MainFrame{
                                 JOptionPane.showMessageDialog(null, "Input file(s) does not exist!", "Error", JOptionPane.ERROR_MESSAGE);
                             if (!error1 && error3)
                                 JOptionPane.showMessageDialog(null, "Radius must be an integer!", "Error", JOptionPane.ERROR_MESSAGE);
-                            if (!error1 && !error2 && !error3)
+                            if (!error1 && !error2 && !error3){
+                                frame.dispose();
                                 project.focalOperation(inFile, outFile, sRad, type, op);
+                            }
                         }
                     });
 
@@ -309,7 +311,7 @@ public class SubFrame extends MainFrame{
         // Operation drop down
         JLabel opLabel = new JLabel("Operation Type");
         JPanel opPanel = new JPanel();
-        String[] choices = { "Sum", "Mean", "Maximum", "Minimum", "Variety" };
+        String[] choices = { "Sum", "Mean", "Maximum", "Minimum", "Variety", "Majority", "Minority"};
         JComboBox<String> opBox = new JComboBox<String>(choices);
 
         // Confirm button

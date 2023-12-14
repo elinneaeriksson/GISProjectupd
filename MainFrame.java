@@ -29,7 +29,7 @@ public class MainFrame extends JFrame{
     public static final JProgressBar progressBar = new JProgressBar(0, 100);
 
     public MainFrame(){
-        setTitle("Raster");
+        setTitle("Raster Machine");
         setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 
         JButton localButton = new JButton("Local Operations");

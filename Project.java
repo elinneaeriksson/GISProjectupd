@@ -22,6 +22,8 @@ public class Project {
         String name1 = s1[s1.length-1].substring(0, s1[s1.length-1].length()-4);
         String[] s2 = in2.split("\\\\");
         String name2 = s2[s2.length-1].substring(0, s2[s2.length-1].length()-4);
+        String[] s3 = out.split("\\\\");
+        String name3 = s3[s3.length-1].substring(0, s3[s3.length-1].length()-4);
         Layer inLayer1 = new Layer("", in1);
         Layer inLayer2 = new Layer("", in2);
         Layer outLayer;
@@ -39,6 +41,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
@@ -49,6 +52,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
@@ -59,6 +63,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
@@ -69,6 +74,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nLocal mean\n\nOutput:\n " + out);
@@ -79,6 +85,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
@@ -90,6 +97,8 @@ public class Project {
     public void focalOperation(String in, String out, String sRad, String nbType, String operation){
         String[] s1 = in.split("\\\\");
         String name1 = s1[s1.length-1].substring(0, s1[s1.length-1].length()-4);
+        String[] s2 = out.split("\\\\");
+        String name2 = s2[s2.length-1].substring(0, s2[s2.length-1].length()-4);
         Layer inLayer = new Layer("", in);
         Layer outLayer;
         MapPanel inMap, outMap;
@@ -113,6 +122,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
+                MainFrame.toggleBox3.setText(name2);
                 mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -123,6 +133,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
+                MainFrame.toggleBox3.setText(name2);
                 mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -133,6 +144,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
+                MainFrame.toggleBox3.setText(name2);
                 mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -143,6 +155,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
+                MainFrame.toggleBox3.setText(name2);
                 mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -153,6 +166,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText("Null");
+                MainFrame.toggleBox3.setText(name2);
                 mainFrame.setMaps(inMap, null, outMap);
                 mainFrame.addMap(inLayer.nRows, inLayer.nCols, scale);
                 outLayer.save(out);
@@ -166,6 +180,8 @@ public class Project {
         String name1 = s1[s1.length-1].substring(0, s1[s1.length-1].length()-4);
         String[] s2 = in2.split("\\\\");
         String name2 = s2[s2.length-1].substring(0, s2[s2.length-1].length()-4);
+        String[] s3 = out.split("\\\\");
+        String name3 = s3[s3.length-1].substring(0, s3[s3.length-1].length()-4);
         Layer inLayer1 = new Layer("", in1);
         Layer inLayer2 = new Layer("", in2);
         Layer outLayer = null;
@@ -182,6 +198,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale,2);
                 outLayer.save(out);
@@ -192,6 +209,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
@@ -202,6 +220,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
@@ -212,6 +231,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
@@ -222,6 +242,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
@@ -232,6 +253,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
@@ -242,6 +264,7 @@ public class Project {
                 outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
                 MainFrame.toggleBox1.setText(name1);
                 MainFrame.toggleBox2.setText(name2);
+                MainFrame.toggleBox3.setText(name3);
                 mainFrame.setMaps(inMap1, inMap2, outMap);
                 mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
                 outLayer.save(out);
