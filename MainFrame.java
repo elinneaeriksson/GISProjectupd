@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class MainFrame extends JFrame{
     public static MapPanel inMap1, inMap2, outMap;
@@ -100,10 +101,10 @@ public class MainFrame extends JFrame{
         c.gridy = 10;
         gridBag.setConstraints(colorBox, c);
         buttonPanel.add(colorBox);
-        itemImageMap.put("Black and White", new ImageIcon("./icons/bw.png"));
-        itemImageMap.put("Cool", new ImageIcon("./icons/cool.png"));
-        itemImageMap.put("Heat", new ImageIcon("./icons/heat.png"));
-        itemImageMap.put("Rainbow", new ImageIcon("./icons/rainbow.png"));
+        itemImageMap.put("Black and White", new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icons/bw.png"))));
+        itemImageMap.put("Cool", new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icons/cool.png"))));
+        itemImageMap.put("Heat", new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icons/heat.png"))));
+        itemImageMap.put("Rainbow", new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icons/rainbow.png"))));
         colorBox.setRenderer(new ImageComboBoxRenderer(itemImageMap));
 
         c.ipady = 150;

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 
 public class SubFrame extends MainFrame{
-    static Icon fileIcon = new ImageIcon("./icons/file_folder.png"); // file icon
+    static Icon fileIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(SubFrame.class.getClassLoader().getResource("icons/file_folder.png"))); // file icon
 
     public static String openDir(){
         JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
@@ -311,7 +311,7 @@ public class SubFrame extends MainFrame{
         // Operation drop down
         JLabel opLabel = new JLabel("Operation");
         JPanel opPanel = new JPanel();
-        String[] choices = { "Sum", "Mean", "Maximum", "Minimum", "Variety", "Majority", "Minority"};
+        String[] choices = { "Sum", "Mean", "Maximum", "Minimum", "Variety"};
         JComboBox<String> opBox = new JComboBox<String>(choices);
 
         // Confirm button
