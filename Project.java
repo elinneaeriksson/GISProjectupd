@@ -187,6 +187,22 @@ public class Project {
                 outLayer.save(out);
                 mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal variety.\n\nOutput:\n" + out + ".");
             }
+            case "Majority" -> {
+                outLayer = inLayer1.zonalMajority(inLayer2, "", MainFrame.progressBar);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                mainFrame.setMaps(inMap1, inMap2, outMap);
+                mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
+                outLayer.save(out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal majority.\n\nOutput:\n" + out);
+            }
+            case "Minority" -> {
+                outLayer = inLayer1.zonalMinority(inLayer2, "", MainFrame.progressBar);
+                outMap = new MapPanel(outLayer.toImage(), outLayer, scale);
+                mainFrame.setMaps(inMap1, inMap2, outMap);
+                mainFrame.addMap(inLayer1.nRows, inLayer1.nCols, scale, 2);
+                outLayer.save(out);
+                mainFrame.showMessage("Input:\n"+in1+"\n"+in2 + "\n\nOperation:\nZonal minority.\n\nOutput:\n" + out);
+            }
         }
     }
 }

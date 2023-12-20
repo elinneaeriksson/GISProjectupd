@@ -763,7 +763,7 @@ public class Layer {
         return outLayer;
     }
 
-    public Layer zonalMajority(Layer inLayer, String outLayerName) {
+    public Layer zonalMajority(Layer inLayer, String outLayerName, JProgressBar progressBar) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[this.nRows*this.nCols];
 
@@ -771,7 +771,9 @@ public class Layer {
         HashMap<Double, ArrayList<Double>> freq = new HashMap<>();
 
         // Assign list of cell values for each zone
+        int totalSteps = nRows * nCols;
         for (int i = 0; i < this.nRows*this.nCols; i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
             double zone = inLayer.values[i];
             if (zone==nullValue) {
                 ArrayList<Double> val = new ArrayList<>();
@@ -788,6 +790,10 @@ public class Layer {
                 val.add(this.values[i]);
                 freq.put(zone, val);
             }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
         }
         
         // Count value frequency and most common value
@@ -804,7 +810,7 @@ public class Layer {
         		}
         	}
         	System.out.println(valFreq);
-        	int max = 0;
+            double max = Double.NEGATIVE_INFINITY;
     		Double maxKey = 0.0;
         	for (Double i : valFreq.keySet()) {
         		if (valFreq.get(i)>max) {
@@ -828,7 +834,7 @@ public class Layer {
         return outLayer;
     }
     
-    public Layer zonalMinority(Layer inLayer, String outLayerName) {
+    public Layer zonalMinority(Layer inLayer, String outLayerName, JProgressBar progressBar) {
         Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
         outLayer.values = new double[this.nRows*this.nCols];
 
@@ -836,7 +842,9 @@ public class Layer {
         HashMap<Double, ArrayList<Double>> freq = new HashMap<>();
 
         // Assign list of cell values for each zone
+        int totalSteps = nRows * nCols;
         for (int i = 0; i < this.nRows*this.nCols; i++) {
+            final int progress = (int) ((i / (double) totalSteps * 100 + 1));
             double zone = inLayer.values[i];
             if (zone==nullValue) {
                 ArrayList<Double> val = new ArrayList<>();
@@ -853,6 +861,10 @@ public class Layer {
                 val.add(this.values[i]);
                 freq.put(zone, val);
             }
+
+            progressBar.setValue(progress);
+            progressBar.update(progressBar.getGraphics());
+            progressBar.setString("Processing: " + progress + "%");
         }
         
         // Count value frequency and least common value

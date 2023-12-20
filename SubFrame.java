@@ -342,7 +342,7 @@ public class SubFrame extends MainFrame{
         // Operation drop down
         JLabel opLabel = new JLabel("Operation Type");
         JPanel opPanel = new JPanel();
-        String[] choices = { "Sum", "Mean", "Maximum", "Minimum", "Variety" };
+        String[] choices = { "Sum", "Mean", "Maximum", "Minimum", "Variety", "Majority", "Minority" };
         JComboBox<String> opBox = new JComboBox<String>(choices);
 
         // Confirm button
